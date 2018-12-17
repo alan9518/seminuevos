@@ -1,28 +1,58 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+/* ==========================================================================
+ * Start App Get Other Components 
+ * 11/12/2018
+ * Alan Medina Silva
+ ========================================================================== */
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+// --------------------------------------
+// Imports
+// --------------------------------------
+  import React, { Component } from 'react';
+  import {BrowserRouter, Route, Switch} from 'react-router-dom';
+  import appNavigationRoutes from './Routes/index'
+  import './App.css';
+  
+
+
+// --------------------------------------
+// Create Component
+// --------------------------------------
+  class App extends Component {
+
+      // --------------------------------------
+      // Iierate The Routes Defined 
+      // on Routes/Index
+      // --------------------------------------
+      renderApp() {
+        return (
+          <BrowserRouter>
+            <Switch>
+
+                {appNavigationRoutes.map((appRoute, key)=> {
+                  return <Route  path  = {appRoute.path} component = {appRoute.component}  key = {key}/>
+                })}
+
+            </Switch>
+          </BrowserRouter>
+        )
+      }
+
+      // --------------------------------------
+      // Render Component
+      // --------------------------------------
+      render() {
+        return (
+          <div className="App">
+            {
+              this.renderApp()
+            }
+          </div>
+        );
+      }
   }
-}
 
-export default App;
+
+// --------------------------------------
+// Export Component
+// --------------------------------------
+  export default App;

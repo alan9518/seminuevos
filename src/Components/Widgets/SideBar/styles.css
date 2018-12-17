@@ -1,0 +1,47 @@
+/* ==========================================================================
+ * Range Price Styles 
+ * Overwirte react-input-range styles
+ * 13/12/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.input-range__track {
+    height: 0.7rem;
+}
+
+
+.input-range__slider {
+    background: #E82527;
+    border: 1px solid #E82527;
+}
+
+.input-range__track--active {
+    background: #E82527;
+}
+
+
+.input-range__label {
+    display: none;
+}
+
+.input-range__slider {
+    border: 2px solid #E82527;
+    background: #fff;
+    border-radius: 50%;
+    font-weight: normal;
+    color: #555555;
+    outline: none;
+}
+
+.input-range__slider {
+    margin-left: -0.6em;
+    top: -0.5em;
+}
+.input-range__slider {
+    box-shadow: -1px 1px 4px 0 rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    height: 22px;
+    position: absolute;
+    width: 22px;
+    z-index: 2;
+}

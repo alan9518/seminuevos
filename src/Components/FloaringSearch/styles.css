@@ -1,0 +1,18 @@
+/* ==========================================================================
+ * Custom Styles for FLoating Search 
+ * 12/12/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.form-slide {
+    bottom: 15% !important;
+}
+
+input.form-control.sm-searchInput {
+    background-color: #fff !important;
+    border-radius: 4px !important;
+}
+
+.search-car {
+    float: right;
+}
