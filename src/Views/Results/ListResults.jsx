@@ -87,15 +87,6 @@
         }
 
         componentDidMount() {
-            // const {location} = this.props;
-			// console.log('TCL: ListResults -> componentDidMount -> location', location)
-            // const {searchResults} = location || [];
-            // console.log('TCL: ListResults -> componentDidMount -> searchResults', searchResults)
-            // this.setState({
-            //     searchResults : [...searchResults],
-            //     isLoaded : false
-            // })
-
             this.loadAPI();
         }
     
@@ -207,7 +198,7 @@
         // Render Results Grid
         // --------------------------------------
         renderResultsGrid() {
-            const {location} = this.props;
+            
             const {searchResults} = this.state;
             return <ResultsGrid searchResults = {searchResults || [] }/>
         }

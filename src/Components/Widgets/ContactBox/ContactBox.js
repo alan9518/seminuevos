@@ -16,8 +16,9 @@
 // --------------------------------------
 // Create Component
 // --------------------------------------
-    const ContactBox = () => {
+    const ContactBox = (props) => {
 
+        const {precio} = props;
 
         // --------------------------------------
         // Render Component
@@ -27,7 +28,7 @@
 
                 <div className="car-dl-info m-b30">
                     <div className="price">
-                        <h2 className="m-t0 m-b5">Precio $5890</h2>
+                        <h2 className="m-t0 m-b5">{`Precio $ ${precio}`}</h2>
                         <span>Hyundai EON LPG Magna Plus</span>	
                     </div>			
                     <form>

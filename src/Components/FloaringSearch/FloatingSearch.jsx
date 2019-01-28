@@ -90,7 +90,6 @@
                 }
                 const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, {settings});
                 const anunciosData = await loadAnunciosPromise.data;
-                // const ubicacionData = this.formatSelectValues(anunciosData);
             
                 return anunciosData;
             }
@@ -163,8 +162,6 @@
             handleFormSubmit = (event)  => {
                 event.preventDefault()
                 const {selectedMarca, selectedModelo, selectedUbicacion, } = this.state;
-                // const data = new FormData(this.state);
-                // console.log('TCL: handleFormSubmit -> data', data)
                 
                 // Get Anuncios
                 this.getAnunciosData().then((data) =>{

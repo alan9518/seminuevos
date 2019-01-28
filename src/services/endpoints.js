@@ -55,31 +55,28 @@
             getAllAnuncios : `${path}/Anuncios/getAllAnuncios.php`,
         
         /** --------------------------------------
-        // Get Product Details
-        // @param {partid <String>}
+        // Get Anuncio Details
+        // @param {id_anuncio <String>}
         // --------------------------------------*/
-            getProduct : 'https://spapps.flex.com/wsxplorit/xploreitservices.asmx/getSingleProduct',
+            getAnuncioDetails : `${path}/Anuncios/getAnuncioDetails.php`,
         
         /** --------------------------------------
-        // Get Related Products
-        // @param {customerid <String>}
-        // @param {keyword <String array>, split by coma}
+        // Get Images Details
+        // @param {id_anuncio <String>}
         // --------------------------------------*/
-            getRelatedProducts : `https://spapps.flex.com/wsxplorit/xploreitservices.asmx/getRelatedPro`,
-
+            getImagenesAnuncio : `${path}/Anuncios/getImagenesAnuncio.php`,
             
         /** --------------------------------------
-        // Get Related Products
-        // @param {customerid <String>}
-        // @param {keyword <String array>, split by coma}
+        // Get User Seller Contact Info
+        // @param {id_anuncio }
         // --------------------------------------*/
-            getRelatedProductsHard : `https://spapps.flex.com/wsxplorit/xploreitservices.asmx/getRelatedPro?customerid=1014&keyword=MDM,Master%20Data,Reference%20Data,%20GDH`,
+            getUsuarioDetailsContact : `${path}/Usuarios/getUsuarioDetailsContact.php`,
         
         /** --------------------------------------
-        // Get Product Attributes Tabs
+        // Get Agency Contact Info
         // @param {partid <String> }
         // --------------------------------------*/
-            getProductTabs : 'https://spapps.flex.com/wsxplorit/xploreitservices.asmx/getTabs',
+            getAgenciaDetailsContact : `${path}/Agencias/getAgenciaDetailsContact.php`,
 
         /** --------------------------------------
         // Get Tab Values

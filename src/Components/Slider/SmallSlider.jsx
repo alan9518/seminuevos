@@ -35,6 +35,7 @@ class SmallSlider extends Component {
     // --------------------------------------
     renderSlider() {
         const baseUrl = 'http://carzone.dexignlab.com/xhtml/images/blog/grid'
+        const {imagesData} = this.props;
         const settings = {
             customPaging: function(i) {
                 return (
@@ -42,6 +43,15 @@ class SmallSlider extends Component {
                         <img src={`${baseUrl}/pic${i + 1}.jpg`} />
                     </a>
                 );
+                    // imagesData.map((image)=> {
+					// 	console.log('TCL: SmallSlider -> renderSlider -> image', image)
+                    //     return (
+                    //         <div>
+                    //             <img src={image.ruta_imagen} />
+                    //         </div>
+                    //     )
+                    // })
+                // );
             },
             dots: true,
             dotsClass: "slick-dots slick-thumb",
@@ -54,18 +64,15 @@ class SmallSlider extends Component {
         return (
             <div className = "sm-smallSlider">
                 <Slider {...settings}>
-                <div>
-                    <img src={baseUrl + "/pic1.jpg"} />
-                </div>
-                <div>
-                    <img src={baseUrl + "/pic2.jpg"} />
-                </div>
-                <div>
-                    <img src={baseUrl + "/pic3.jpg"} />
-                </div>
-                <div>
-                    <img src={baseUrl + "/pic4.jpg"} />
-                </div>
+                {
+                    imagesData && imagesData.map((image)=> {
+                        return (
+                            <div>
+                                <img src={image.ruta_imagen} />
+                            </div>
+                        )
+                    })
+                }
                 </Slider>
             </div>
         );
