@@ -9,7 +9,12 @@
 // --------------------------------------
     import React, { Component, Fragment } from "react";
     import PropTypes from "prop-types";
-    import {SingleSelect, ProjectLink} from '../../Components'
+    import {Endpoints} from '../../services/endpoints';
+    import axios from 'axios';
+    import Select from 'react-select';
+    import {SingleSelect, ProjectLink, CustomSelect} from '../../Components';
+    import {withRouter, Redirect} from 'react-router-dom';
+
     import './styles.css';
 
 // --------------------------------------
@@ -23,135 +28,317 @@
         constructor(props) {
             super(props);
             this.state = {
-                tipo : [
-                    {value : undefined, label : 'Selecciona el Tipo'},
-                    {value : 'Autos', label : 'Autos'},
-                    {value : 'Motos', label : 'Motos'},
-                    {value : 'Clasicos', label : 'Clásicos'}
-                ],
-                marca : [
-                    {value : undefined, label : 'Selecciona la Marca'},
-                    {value : 'Dodge', label : 'Dodge'},
-                    {value : 'Ford', label : 'Ford'},
-                    {value : 'Chevroleft', label : 'Chevroleft'},
-                    {value : 'Mazda', label : 'Mazda'},
-                    {value : 'Mitsubishi', label : 'Mitsubishi'}
-                ],
-                modelo : [
-                    {value : undefined, label : 'Selecciona el Modelo'},
-                    {value : 'Aveo', label : 'Aveo'},
-                    {value : 'Mirage', label : 'Mirage'},
-                    {value : 'Lobo', label : 'Lobo'},
-                    {value : 'Versa', label : 'Versa'},
-                    {value : 'Neon', label : 'Neon'}
-                ],
-                ubicacion : [
-                    {value : undefined, label : 'Selecciona el Estado'},
-                    {value : 'Jalisco', label : 'Jalisco'},
-                    {value : 'Durango', label : 'Durango'},
-                    {value : 'Estado de Mexico', label : 'Estado de México'},
-                    {value : 'Monterrey', label : 'Monterrey'},
-                    {value : 'Queretaro', label : 'Queretaro'}
-                
-                ] 
-                
+                isLoaded : false,
+                selectedMarca : {value : undefined, label : 'Selecciona la Marca'},
+                selectedModelo : {value : undefined, label : 'Selecciona el Modelo'},
+                selectedUbicacion : {value : undefined, label : 'Selecciona el Estado'},
+                modelos : [],
+                isModelosLoaded : false,
+                precioBase : '',
+                precioTope : '',
+                searchResults : {},
+                redirectUser : false
             }
         }
+
+        // --------------------------------------
+        // Load API
+        // --------------------------------------
+        componentDidMount() {
+            this.setState( {
+                isLoaded : true
+            })
+        }
+        
+
+
+    /* ==========================================================================
+    ** API Connection
+    ** ========================================================================== */
+
+            
+            /** --------------------------------------
+            // Get Modelos
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async loadModelos(marca_id) {    
+                const {value} =  marca_id;
+                const loadModelosPromise = axios.get(Endpoints.getModelosByMarca, { headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        marca_id : value || 0
+                    }  
+                });
+
+                return loadModelosPromise;
+            }
+
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnunciosData() {
+                const settings = { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                }
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, {settings});
+                const anunciosData = await loadAnunciosPromise.data;
+                // const ubicacionData = this.formatSelectValues(anunciosData);
+            
+                return anunciosData;
+            }
+
+
+
+
+    
+    /* ==========================================================================
+    ** Handle State
+    ** ========================================================================== */
+            
+            // --------------------------------------
+            // Handle Marcas Select State
+            // --------------------------------------
+            handleSelectMarcaChange = (selectedMarca) => {
+                
+                this.loadModelos(selectedMarca)
+                .then((modelosAnswer)=> {
+                    let modelos =  modelosAnswer.data;
+                    this.setState({
+                        selectedMarca:selectedMarca,
+                        modelos : modelos,
+                        isModelosLoaded : false
+                    })
+
+                })
+			    
+            }
+
+            // --------------------------------------
+            // Get Model Value
+            // --------------------------------------
+            handleSelectModeloChange = (selectedModelo) => {
+				console.log('​handleSelectModeloChange -> selectedModelo', selectedModelo)
+                this.setState({
+                    selectedModelo : selectedModelo
+                })
+            }
+
+            // --------------------------------------
+            // Get Ubicacion Value
+            // --------------------------------------
+            handleSelectUbicacionChange = (selectedUbicacion) => {
+				console.log('​handleSelectModeloChange -> selectedUbicacion', selectedUbicacion)
+                this.setState({
+                    selectedUbicacion : selectedUbicacion
+                })
+            }
+
+            // --------------------------------------
+            // Get JSON Response and Format to 
+            // React-select Type
+            // --------------------------------------
+            formatSelectValues(valuesAray) {
+                const data = valuesAray.map((valueItem)=> {
+                    let data = {
+                        label : valueItem.nombre,
+                        value : valueItem.id
+                    }
+                    return data;
+                })
+                return data;
+            }
+
+
+            // --------------------------------------
+            // Submit Form
+            // --------------------------------------
+            handleFormSubmit = (event)  => {
+                event.preventDefault()
+                const {selectedMarca, selectedModelo, selectedUbicacion, } = this.state;
+                // const data = new FormData(this.state);
+                // console.log('TCL: handleFormSubmit -> data', data)
+                
+                // Get Anuncios
+                this.getAnunciosData().then((data) =>{
+                    console.log('TCL: this.getAnunciosData -> data', data)
+                    const anunciosData =  data;
+                    // Set State to Redirect User
+                    this.setState({
+                        searchResults : anunciosData,
+                        redirectUser: true
+                    });
+                    
+                });
+                
+
+                
+                
+            }
+
+            
+            // --------------------------------------
+            // get Price Filters Value
+            // --------------------------------------
+            handleInputChange =(event)=> {
+                const target = event.target;
+                const name = target.name;
+                const value = target.value;
+
+                this.setState({
+                    [name]: value
+                });
+
+            }
+
+    /* ==========================================================================
+    ** Render Methods
+    ** ========================================================================== */
+
+        // --------------------------------------
+        // Render Marcas Select
+        // Hanlde its State By its side
+        // --------------------------------------
+        renderMarcasSelect(marcas) {
+            const {selectedMarca} = this.state;
+            return (
+                <div className = "input-group">
+                    <Select
+                        className="basic-single"
+                        classNamePrefix="select"
+                        defaultValue = {marcas[0]} 
+                        isClearable={false}
+                        isSearchable={true}
+                        name = {'brandSelect'}
+                        value={selectedMarca}
+                        onChange={this.handleSelectMarcaChange}
+                        options={this.formatSelectValues(marcas)}
+                    />
+                </div>
+            )
+        }
+
+
 
         // --------------------------------------
         // Render Search Box
         // --------------------------------------
         renderSearchBox() {
-            const {tipo, marca, modelo, ubicacion} = this.state
+            const {modelos, selectedModelo, precioBase, precioTope, redirectUser, searchResults} = this.state
+
+            if (redirectUser) {
+                return <Redirect to={{ pathname: '/resultados', searchResults: {searchResults}}} />
+            }
+            
+
+            const {tipoData, marcasData, ubicacionData} = this.props;
+
             return (
-               <Fragment>
+                <Fragment>
                     <div className = "form-slide">
-                    <div className = "container">
-                        <form className = " search-car" action="new-car-search-result-list.html" method="post">
-                            <div className = "form-head">
-                                <h2>Encuentra tu Pr&oacute;ximo Auto</h2>
-                            </div>
-                            
-                            <div className = "form-find-area">
+                        <div className = "container">
+                            <form className = " search-car"  onSubmit = {this.handleFormSubmit}>
+                                <div className = "form-head">
+                                    <h2>Encuentra tu Pr&oacute;ximo Auto</h2>
+                                </div>
                                 
-                                <div className = "tab-content">
+                                <div className = "form-find-area">
                                     
-                                    <div id="new-car"  className = "tab-pane active clearfix">
-                                    
-                                        <div  id="budgetDiv" className = "new_form_div">
-                                            <div className = "input-group">
-                                                <SingleSelect 
-                                                    defaultValue = {tipo[0]}
-                                                    isClearable={false}
-                                                    isSearchable={false}
-                                                    options={tipo}
-                                                    name = {'searchTypeSelect'}
-                                                />
-                                            </div>
-                                            <div className = "input-group">
-                                                <SingleSelect
-                                                    defaultValue = {marca[0]} 
-                                                    isClearable={false}
-                                                    isSearchable={true}
-                                                    options={marca}
-                                                    name = {'brandSelect'}
-                                                />
-                                            </div>
-                                            <div className = "input-group">
-                                                <SingleSelect
-                                                    defaultValue = {modelo[0]} 
-                                                    isClearable={false}
-                                                    isSearchable={true}
-                                                    options={modelo}
-                                                    name = {'modelSelect'}
-                                                />
-                                            </div>
-                                            <div className = "input-group">
-                                                <SingleSelect 
-                                                    defaultValue = {ubicacion[0]}
-                                                    isClearable={false}
-                                                    isSearchable={true}
-                                                    options={ubicacion}
-                                                    name = {'LocationSelect'}
-                                                />
-                                            </div>
-                                        </div>
-                                                        
-                                        <div className="input-group">
-                                            <div className="row">
-                                                <div className="col-lg-6">
-                                                    <input type="text" className = "form-control sm-searchInput" placeholder = "Precio Desde"/>
+                                    <div className = "tab-content">
+                                        
+                                        <div id="new-car"  className = "tab-pane active clearfix">
+                                        
+                                            <div  id="budgetDiv" className = "new_form_div">
+
+                                                <div className = "input-group">
+                                                    <CustomSelect 
+                                                        defaultValue = {tipoData[0]}
+                                                        isClearable={false}
+                                                        isSearchable={false}
+                                                        options={tipoData}
+                                                        name = {'searchTypeSelect'}
+                                                        // onChange = {this.handleSelectMarcaChange}
+
+                                                    />
                                                 </div>
 
-                                                <div className="col-lg-6">
-                                                <input type="text" className = "form-control sm-searchInput" placeholder = "Precio Hasta"/>
+                                                {this.renderMarcasSelect(marcasData)}
+
+                                                <div className = "input-group">
+                                                    <Select
+                                                        className="basic-single"
+                                                        classNamePrefix="select"
+                                                        defaultValue = {modelos[0]} 
+                                                        isClearable={false}
+                                                        isSearchable={true}
+                                                        name = {'brandSelect'}
+                                                        value={selectedModelo}
+                                                        onChange={this.handleSelectModeloChange}
+                                                        options={this.formatSelectValues(modelos)}
+                                                    />
                                                 </div>
+
+                                            <div className = "input-group">
+                                                    
+                                                    <Select
+                                                        className="basic-single"
+                                                        classNamePrefix="select"
+                                                        defaultValue = {{value : 0, 'label':'Selecciona el Estado'}}
+                                                        isClearable={false}
+                                                        isSearchable={true}
+                                                        options={this.formatSelectValues(ubicacionData)}
+                                                        name = {'LocationSelect'}
+                                                        onChange={this.handleSelectUbicacionChange}
+                                                    />
+                                                </div>
+                                                
+                                            </div>
+                                                            
+                                            <div className="input-group">
+                                                <div className="row">
+                                                    <div className="col-lg-6">
+                                                        <input type="text" className = "form-control sm-searchInput" placeholder = "Precio Desde" onChange = {this.handleInputChange} value = {precioBase} name = {"precioBase"}/>
+                                                    </div>
+
+                                                    <div className="col-lg-6">
+                                                        <input type="text" className = "form-control sm-searchInput" placeholder = "Precio Hasta" onChange = {this.handleInputChange}  value = {precioTope} name = {"precioTope"}/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div className = "input-group">
+                                                <button className = "site-button button-lg btn-block" type="submit">Buscar</button>
+
+                                            </div>
+                                            <div className = "input-group text-center">
+
+                                                
+
+                                                {// <ProjectLink route = {`/resultados`}>
+                                                //     <span className = "site-button-link">
+                                                //         B&uacute;squeda Avanzada 
+                                                //     </span>
+                                                // </ProjectLink>
+                                                }
                                             </div>
                                         </div>
                                         
-                                        <div className = "input-group">
-                                            <ProjectLink route = {`/resultados`}>
-                                                <button className = "site-button button-lg btn-block" type="submit">Buscar</button>
-                                            </ProjectLink>
-                                        </div>
-                                        <div className = "input-group text-center">
-                                            <ProjectLink route = {`/resultados`}>
-                                                <span className = "site-button-link">
-                                                    B&uacute;squeda Avanzada 
-                                                </span>
-                                            </ProjectLink>
-                                        </div>
+                                        
                                     </div>
-                                    
-                                    
                                 </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>	
+                            </form>
+                        </div>
+                    </div>	
                 
                 <div className="clearfix"></div>
-               </Fragment>
+            </Fragment>
             )
         }
 
@@ -159,7 +346,8 @@
         // Render Component
         // --------------------------------------
         render() {
-            return this.renderSearchBox();
+            const {isLoaded} = this.state;
+            return isLoaded && this.renderSearchBox();
         }
     }
 
@@ -173,4 +361,4 @@
 // --------------------------------------
 // Export Component
 // --------------------------------------
-    export default FloatingSearch;
+    export default withRouter(FloatingSearch);

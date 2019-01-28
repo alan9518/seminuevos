@@ -8,6 +8,8 @@
 // --------------------------------------
     import React, { Component, Fragment } from "react";
     import PropTypes from "prop-types";
+    import {Endpoints} from '../../services/endpoints';
+    import axios from 'axios';
     import {SubHeader, SideBar, Breadcumbs, ResultsList, ResultsSorting, ResultsGrid} from '../../Components/'
     
 // --------------------------------------
@@ -78,9 +80,63 @@
                     {label : 'Precio: mas alto al mas bajo' , value : 2},
                     {label : 'Nombre: A a la Z' , value : 3},
                     {label : 'Nombre: Z a la  A' , value : 4},
-                ]
+                ],
+                searchResults : [],
+                isLoaded : false
             }
         }
+
+        componentDidMount() {
+            // const {location} = this.props;
+			// console.log('TCL: ListResults -> componentDidMount -> location', location)
+            // const {searchResults} = location || [];
+            // console.log('TCL: ListResults -> componentDidMount -> searchResults', searchResults)
+            // this.setState({
+            //     searchResults : [...searchResults],
+            //     isLoaded : false
+            // })
+
+            this.loadAPI();
+        }
+    
+
+    /* ==========================================================================
+    ** API Connection
+    ** ========================================================================== */
+
+        // --------------------------------------
+        // GET All Requests
+        // --------------------------------------
+        async loadAPI() {
+            const anunciosData =  await this.getAnunciosData();
+            this.setState({
+                searchResults : anunciosData,
+                isLoaded : true
+            })
+        }
+
+
+        /** --------------------------------------
+        // Get Anuncios Data
+        // With Promises
+        // @returns {An Promise Object}
+        // --------------------------------------*/
+        async getAnunciosData() {
+            const settings = { 
+                headers : { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+            }
+            const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, {settings});
+            const anunciosData = await loadAnunciosPromise.data;
+            // const ubicacionData = this.formatSelectValues(anunciosData);
+        
+            return anunciosData;
+        }
+
+
+
 
     /* ==========================================================================
      *  Hanlde State
@@ -101,14 +157,6 @@
      *  Render Methods
      ========================================================================== */
 
-        // --------------------------------------
-        // Set initial Values
-        // --------------------------------------
-        // componentDidMount() {
-        //     this.setState({
-        //         listLayout : [1]
-        //     })
-        // }
         
         // --------------------------------------
         // Render SubHeader
@@ -148,8 +196,10 @@
         // Render ResultsList
         // --------------------------------------
         renderResultsList() {
-            const {carsList} = this.state;
-            return <ResultsList carsList = {carsList}  />
+            const {searchResults} = this.state;
+            console.log('TCL: ListResults -> renderResultsList -> searchResults', searchResults)
+            // console.log('TCL: ListResults -> renderResultsList -> searchResults', ...searchResults)
+            return <ResultsList searchResults = {searchResults} />
         }
 
 
@@ -157,8 +207,9 @@
         // Render Results Grid
         // --------------------------------------
         renderResultsGrid() {
-            const {carsList} = this.state;
-            return <ResultsGrid carsList = {carsList}/>
+            const {location} = this.props;
+            const {searchResults} = this.state;
+            return <ResultsGrid searchResults = {searchResults || [] }/>
         }
 
         // --------------------------------------
@@ -225,7 +276,8 @@
         // Render Component
         // --------------------------------------
         render() {
-            return this.renderListView();
+            const {isLoaded } = this.state
+            return isLoaded && this.renderListView();
         }
     }
 

@@ -23,11 +23,12 @@
         // Render ResultsList
         // --------------------------------------
 
-            const {carsList} = props;
+            const {searchResults} = props;
+			console.log('TCL: ResultsList -> searchResults', searchResults)
             return (
                 <Fragment>
                     {
-                        carsList.map((vehicle, index)=> {
+                        searchResults && searchResults.map((vehicle, index)=> {
                             return <ResultItem key = {index} vehicle = {vehicle}/>
                         })
                     }

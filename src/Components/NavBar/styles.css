@@ -168,7 +168,7 @@
     text-transform: capitalize;
     transition: all 0.15s linear;
     font-weight: 600;
-    font-family: Raleway;
+    font-family: 'futuramedium';
 }
 
 .header-nav .nav>li .sub-menu li a:hover {
@@ -253,7 +253,7 @@
     right: 0px;
     visibility: hidden;
     width: 100%;
-    font-family: Raleway;
+    font-family: 'futuramedium';
     margin-top: 20px;
     padding: 10px 0 0;
 }

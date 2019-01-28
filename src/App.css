@@ -115,7 +115,7 @@
 
 body {
   background-color: #FFF;
-  font-family: 'Raleway', sans-serif;
+  font-family: 'futuramedium', sans-serif;
   font-size: 14px;
   font-weight: 400;
   color: #000;
@@ -130,6 +130,15 @@ a {
   outline: 0 none;
   text-decoration: none;
 }
+
+a, p, h1, h2, h3, h4, h5, h6, span, option {
+  font-family: futuramedium !important;
+}
+
+h1.text-white {
+  font-family: futuraLight !important;
+}
+
 
 a:hover,
 a:focus {
@@ -1483,7 +1492,7 @@ dl dd {
 }
 
 .bg-primary {
-  background-color: ;
+  /* background-color: ; */
 }
 
 .bg-white {
@@ -2401,7 +2410,7 @@ label {
 
 input[type=checkbox],
 input[type=radio] {
-  display: ;
+  /* display: ; */
   opacity: 0;
   margin-left: 1px !important;
   position: absolute;
@@ -3289,7 +3298,7 @@ blockquote:before {
   text-transform: capitalize;
   transition: all 0.15s linear;
   font-weight: 600;
-  font-family: Raleway;
+  font-family: 'futuramedium';
 }
 
 .header-nav .nav>li .sub-menu li a:hover {
@@ -3374,7 +3383,7 @@ blockquote:before {
   right: 0px;
   visibility: hidden;
   width: 100%;
-  font-family: Raleway;
+  font-family: 'futuramedium';
   margin-top: 20px;
   padding: 10px 0 0;
 }
@@ -3632,7 +3641,7 @@ blockquote:before {
   }
 
   .header-nav .nav>li>a {
-    padding: ;
+    /* padding: ; */
   }
 
   .header-nav .nav i {
@@ -4254,7 +4263,7 @@ blockquote:before {
   top: 35%;
   width: 100%;
   margin: 0;
-  font-family: Raleway;
+  font-family: 'futuramedium';
   color: #FFFFFF;
   font-family: "Raleway";
 }
@@ -4741,7 +4750,7 @@ blockquote:before {
   list-style: none;
 }
 
-.dlab-post-tags .post-tags a {
+.dlab-post-tags .post-tags a , .dlab-post-tags .post-tags span {
   border: 1px solid #ebedf2;
   padding: 2px 8px;
   color: #a9a9a9;
@@ -5420,7 +5429,7 @@ ol.comment-list li.comment .comment-respond .comment-form p {
   border: 1px solid #e1e6eb;
   text-align: center;
   border-radius: 4px 0 0 4px;
-  -webkit- border-radius: 4px 0 0 4px;
+  -webkit-border-radius: 4px 0 0 4px;
 }
 
 .comments-area p.comment-form-author:before {
@@ -7209,7 +7218,7 @@ a,
 .site-button-link.yellow:hover,
 .site-button-link.yellow:active,
 .site-button-link.yellow:focus {
-  color: ##d4af19;
+  color: #d4af19;
 }
 
 /* purple */
@@ -9207,7 +9216,7 @@ border-radius:3px;
 
 .pricingtable-bx {
   color: #282a3c;
-  font-family: Raleway;
+  font-family: 'futuramedium';  
   font-size: 45px;
   font-weight: 500;
 }
@@ -9345,7 +9354,7 @@ border-radius:3px;
 /*== >Alert box =====*/
 
 .alert {
-  font-family: Raleway;
+  font-family: 'futuramedium';
 }
 
 .alert.alert-sm {
@@ -9728,7 +9737,7 @@ border-radius:3px;
 .overlay-primary-light:after,
 .overlay-primary-middle:after,
 .overlay-primary-dark:after {
-  background: ;
+  /* background: ; */
 }
 
 .overlay-black-light:after {
@@ -11580,7 +11589,7 @@ ol.commentlist li .star-rating {
   border-top: 1px solid #141414;
 }
 
-.full-blog-dark .dlab-post-tags .post-tags a {
+.full-blog-dark .dlab-post-tags .post-tags a, .full-blog-dark .dlab-post-tags .post-tags span {
   border: 1px solid #2b2b2b;
 }
 
@@ -11677,7 +11686,7 @@ ol.commentlist li .star-rating {
     width: 100%;
   }
 
-  .slide-contant-btn .site-button` {
+  .slide-contant-btn .site-button {
     margin-top: 50px;
   }
 }

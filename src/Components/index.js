@@ -20,6 +20,7 @@
     import SmallSlider from './Slider/SmallSlider';
     import FloatingSearch from './FloaringSearch/FloatingSearch';
     import SingleSelect from './CustomSelect/SingleSelect';
+    import CustomSelect from './CustomSelect/CustomSelect';
     import ProjectLink from './Links/ProjectLink';
     import Breadcumbs from './Breadcumbs/Breadcumbs';
     import ResultsList from './ResultsList/ResultsList';
@@ -75,6 +76,7 @@
         FooterMenu,
         FooterSubscribe,
         SingleSelect,
+        CustomSelect,
         ProjectLink,
         ResultsList,
         ResultItem,

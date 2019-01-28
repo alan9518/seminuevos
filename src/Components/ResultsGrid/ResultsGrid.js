@@ -24,11 +24,11 @@
         // Render ResultsGrid
         // --------------------------------------
 
-            const {carsList} = props;
+            const {searchResults} = props;
             return (
                 <Fragment>
                     {
-                        carsList.map((vehicle, index)=> {
+                        searchResults && searchResults.map((vehicle, index)=> {
                             return (
                                 <div className = "col-md-4">
                                     <ProductCard key = {index} vehicle = {vehicle}/>
