@@ -23,15 +23,15 @@
 // Create Component
 // --------------------------------------
     const CheckBoxes = (props) => {
-        const {id, label, value, onClick} = props;
+        const {id, label, value, onChange, checked} = props;
 
         // --------------------------------------
         // Render Component
         // --------------------------------------
         return ( 
             <Fragment> 
-                <div className="search-content" onClick = {onClick}>
-					<input id={id} type="checkbox"/>
+                <div className="search-content" >
+					<input id={id} type="checkbox" checked = {checked} onChange = {onChange}/>
 					<label htmlFor={id} className="search-content-area">{label} </label>
 				</div>
             </Fragment>

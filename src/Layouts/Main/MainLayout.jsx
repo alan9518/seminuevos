@@ -51,11 +51,16 @@
             )
         }
 
+
+
+
         // --------------------------------------
         // Render Home
         // --------------------------------------
         renderMainView() {
             const {location} = this.props;
+            const {pathname} = location;
+			console.log('TCL: MainLayout -> renderMainView -> location', location)
             return (
                 <Fragment>
                     <div className="page-wraper">
@@ -75,12 +80,12 @@
                     </div>
 
 
-                    <Footer/>
+                    {  pathname !== '/' ?  <Footer/> : null}
 
 
-                 </div>
+                </div>
 
-               </Fragment>
+            </Fragment>
             )
         }
 

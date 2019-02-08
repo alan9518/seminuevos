@@ -27,12 +27,12 @@
             <Fragment>
                 <div className="widget widget_about">
                     <div className="logo-footer"><img src={logo} alt=""/></div>
-                    <p className="m-tb20"><strong></strong>  simply dummy text of the print ing and in type setting industry. Lorem Ipsum has bee the industry's standard...</p>
+                {/*    <p className="m-tb20"><strong></strong>  simply dummy text of the print ing and in type setting industry. Lorem Ipsum has bee the industry's standard...</p>
 
                     <ul className="dlab-contact-info">
                         <li><i className="flaticon-placeholder"></i>Demo Address #8901 Marmora Road Chi Minh City, Vietnam</li>
                         <li><i className="flaticon-customer-service"></i>Phone : 0800-123456 (24/7 Support Line)</li>
-                    </ul>
+                    </ul>*/}
                 </div>
             </Fragment>
         )

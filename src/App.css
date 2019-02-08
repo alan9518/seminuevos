@@ -10764,7 +10764,7 @@ footer.footer-white .footer-bottom a {
 
 .page-content {
   margin-top: 0;
-  padding-bottom: 50px;
+  /* padding-bottom: 50px; */
 }
 
 .content-area {
@@ -11973,4 +11973,15 @@ Spacing End Alignment
 
 .contact-style-1 .form-group {
   margin-bottom: 25px;
+}
+
+
+
+.sr-toggleSpan {
+  color: #e25f57;
+  cursor: pointer;
+}
+
+.sm-footerRow {
+  padding-top: 20px;
 }
