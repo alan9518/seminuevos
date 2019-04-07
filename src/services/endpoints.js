@@ -35,8 +35,8 @@
         // Get Marcas By Name
         // marca_id=3
         // --------------------------------------
-            getModelosByMarca : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Modelo/getModelosByMarca.php',
-            // getModelosByMarca : `${path}/Modelo/getModelosByMarca.php`,
+            // getModelosByMarca : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Modelo/getModelosByMarca.php',
+            getModelosByMarca : `${path}/Modelo/getModelosByMarca.php`,
         
         /** --------------------------------------
         // Get Products By Category
@@ -48,17 +48,25 @@
         // Get All Categories
         // --------------------------------------
             getAllEstados : `${path}/Estado/getEstados.php`,
+
+        // --------------------------------------
+        // Get All Categories
+        // --------------------------------------
+            getAnunciosCount : `${path}/Anuncios/getAnunciosCount.php`,
         
-        // --------------------------------------
-        // Get Sub Categories
-        // --------------------------------------
+       /** --------------------------------------
+       // GET All Anuncios
+       // @param {page}
+       // -------------------------------------- */
             getAllAnuncios : `${path}/Anuncios/getAllAnuncios.php`,
+                
         
         /** --------------------------------------
         // Get Anuncio Details
         // @param {id_anuncio <String>}
         // --------------------------------------*/
             getAnuncioDetails : `${path}/Anuncios/getAnuncioDetails.php`,
+            // getAnuncioDetails : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Anuncios/getAnuncioDetails.php',
         
         /** --------------------------------------
         // Get Images Details
@@ -79,10 +87,53 @@
             getAgenciaDetailsContact : `${path}/Agencias/getAgenciaDetailsContact.php`,
 
         /** --------------------------------------
-        // Get Tab Values
-        // @param {partid <String>}
-        // @param {busstypeid <String>}
+        // Get Agency Contact Info
+        // @param {id_estado <String> }
         // --------------------------------------*/
-            getTabAttributes : 'https://spapps.flex.com/wsxplorit/xploreitservices.asmx/getTabAttributes',
+            getMunicipiosByEstado : `${path}/Municipios/getMunicipios.php`,
+
+        /** --------------------------------------
+        // User login
+        // @param {correo_usuario <String>}
+        // @param {pass_usuario <String>}
+        // --------------------------------------*/
+            loginUser : `${path}/Usuarios/loginUsuario.php`,
+
+
+        /** --------------------------------------
+        // Agency login
+        // @param {correo_usuario <String>}
+        // @param {pass_usuario <String>}
+        // --------------------------------------*/
+            loginAgency : `${path}/Agencias/loginAgencia.php`,
+
+        /** --------------------------------------
+        // Register User
+        // @param {correo_usuario <String>}
+        // @param {nombre_usuario <String>}
+        // @param {apellidos_usuario <String>}
+        // @param {tel_usuario <String>}
+        // @param {pass_usuario <String>}
+        // --------------------------------------*/
+            registerUser : `${path}/Usuarios/addUsuario.php`,
+
+        // --------------------------------------
+        // GET All Vehiculos
+        // --------------------------------------        
+            getVehiculos : `${path}/Vehiculos/getVehiculos.php`,
+        
+        // --------------------------------------
+        // Save Vehiculo
+        // --------------------------------------
+            // addVehiculo : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Vehiculos/addVehiculo.php',
+            addVehiculo : `${path}/Vehiculos/addVehiculo.php`,
+
+
+        // --------------------------------------
+        // Save Vehiculo
+        // --------------------------------------
+            // addAnuncio : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Anuncios/AddAnuncio.php'
+            addAnuncio : `${path}/Anuncios/AddAnuncio.php`
+            
 
     }

@@ -90,8 +90,7 @@
 						/>
 					</CustomAccordionItem>
 
-					<CustomAccordionItem accordionTitle = {"Rango de Precios"} expanded = {true}>
-						
+					<CustomAccordionItem accordionTitle = {"Rango de Precios"} expanded = {true}>						
 						<PriceSlider/>
 					</CustomAccordionItem>
 
@@ -101,7 +100,8 @@
 									isSearchable={true}
 									options={this.state.marcas}
 									name = {'brandSelect'}
-								/>
+								/>{/*
+						*/}
 						<OptionsBox options = {this.state.marcas}/>
 					</CustomAccordionItem>
 

@@ -19,9 +19,10 @@
 
         const {route, itemKey} = props;
 
+        const routePath = `/Demo2${route}`;
 
         return (
-            <NavLink to= {route} key = {itemKey} >
+            <NavLink to= {routePath} key = {itemKey} >
                 {props.children}
             </NavLink>
         )

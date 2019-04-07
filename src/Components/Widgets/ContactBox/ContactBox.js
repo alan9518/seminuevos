@@ -18,7 +18,7 @@
 // --------------------------------------
     const ContactBox = (props) => {
 
-        const {precio} = props;
+        const {precio, titulo ,correo} = props;
 
         // --------------------------------------
         // Render Component
@@ -29,17 +29,23 @@
                 <div className="car-dl-info m-b30">
                     <div className="price">
                         <h2 className="m-t0 m-b5">{`Precio $ ${precio}`}</h2>
-                        <span>Hyundai EON LPG Magna Plus</span>	
+                        <span>{titulo}</span>	
                     </div>			
                     <form>
-                        <p className="m-t0 m-b5">Vendedor</p>
+                        <h3 className="m-t0 m-b5">Contacto Vendedor</h3>
                         <ul>
-                            <li>Correo</li>
-                            <li>Telefono</li>
+                            <li>
+                                
+                                <a href = {`mailto:${correo}`}> {correo} </a>
+                            </li>
+                            
                         </ul>
                         <div className="clearfix">
                             
-                            <AppButton buttonText = {"Contactar al Vendedor"}/>
+                            <AppButton
+                                buttonClass={"site-button button-lg btn-block sr-bigButton"}    
+                                buttonText = {"Contactar al Vendedor"}
+                                onClick = {props.onClick}/>
                         </div>
                     </form>
                 </div>

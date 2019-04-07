@@ -7,8 +7,9 @@
 // --------------------------------------
 // Import Dependences
 // --------------------------------------
-    import React, { Component, Fragment }  from 'react'
-    import {SubHeader, Breadcumbs} from '../../Components/'
+    import React, { Component, Fragment }  from 'react';
+    import {SubHeader, Breadcumbs} from '../../Components/';
+    import bgImage from '../../images/header/seguridadBG2.jpg';
     import PropTypes from 'prop-types'
 
 
@@ -22,7 +23,9 @@
         // Render SubHeader
         // --------------------------------------
         renderSubHeader() {
-            return <SubHeader headerTtitle = {'Consejos de Seguridad'} />
+            return <SubHeader 
+                headerTtitle = {'Consejos de Seguridad'} 
+                backgroundImage = {bgImage}/>
         }
 
         // --------------------------------------
@@ -41,26 +44,26 @@
             return (
                 <Fragment>
                     
-                    <div class="page-content bg-white">
+                    <div className="page-content bg-white">
 
 
                         {this.renderSubHeader()}
                         {this.renderBreadcumbs()}
                         
                         
-                        <div class="content-area">
+                        <div className="content-area">
                             
-                            <div class="container">
-                                <div class="row">
+                            <div className="container">
+                                <div className="row">
                                     
-                                <div class="blog-post blog-single">
-                                        <div class="section-head text-center head-1">
-                                        <span class="text-primary">Consejos de Seguridad</span>
-                                        <h3 class="h3 text-uppercase">Recomendaciones emitidas por la SSP</h3>
-                                        <div class="dlab-separator bg-gray-dark"></div>
+                                <div className="blog-post blog-single">
+                                        <div className="section-head text-center head-1">
+                                        <span className="text-primary">Consejos de Seguridad</span>
+                                        <h3 className="h3 text-uppercase">Recomendaciones emitidas por la SSP</h3>
+                                        <div className="dlab-separator bg-gray-dark"></div>
                                         </div>
-                                        <div class="dlab-post-text">
-                                            <ul class="list-angle-right">
+                                        <div className="dlab-post-text">
+                                            <ul className="list-angle-right">
                                                 <li>No acepte realizar pago en efectivo, por algún vehículo.</li>
                                                 <li>Solicite la revisión del vehículo físicamente, antes de realizar la compra.</li>
                                                 <li>Antes de realizar el pago mediante alguna institución financiera, verifique que no tenga reporte de robo en el siguiente sitio web: <a href="http://www2.repuve.gob.mx:8080/ciudadania/" target="_blank">http://www2.repuve.gob.mx:8080/ciudadania/</a></li>

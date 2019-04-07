@@ -381,6 +381,17 @@
 
     @media only screen and (max-width: 767px) {
 
+
+        .sm-fullScreenSlider {
+            padding-bottom: 0 !important;
+        }
+
+
+        .page-content {
+            /* padding-bottom: 30px; */
+            padding-bottom: 0 !important;
+        }
+
         .logo-header,
         .is-fixed.header-curve .logo-header {
             width: 210px;
@@ -390,9 +401,72 @@
         .is-fixed.header-curve .logo-header a img {
             vertical-align: sub;
         }
+
+
+        .search-car {
+            position: absolute;
+            bottom: -72px;
+            left: 33px;
+            margin-bottom: 0;
+        }
+
+        .search-car {
+            margin-bottom: 0 !important;
+        }
+
+
+        .slider a.previousButton {
+            display: none;
+        }
+
+        .slider a.nextButton {
+            display: none;
+        }
     }
 
 
     .car-dl-info {
         margin-top: 15px;
+    }
+
+
+
+    .footerLinks a, .footerLinks a:visited {
+        color: #e25f57;
+    }
+
+    .footerLinks a:active, .footerLinks a:hover, p a, table thead th {
+        color: #333;
+    }
+    
+    .footerLinks a:focus, .footerLinks a:hover {
+        text-decoration: none;
+        outline: 0;
+    }
+    .footerLinks a:focus, .footerLinks a:hover {
+        /* color: #23527c; */
+        color: #333;
+        text-decoration: none;
+    }
+    .footerLinks a:active, .footerLinks a:hover {
+        outline: 0;
+    }
+
+    .input-group {
+        margin-bottom: 10px !important;
+    }
+
+    .dlab-feed-list {
+        min-height: 372px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        background-color: #f4f4f4;
+    }
+
+
+    #appView .powrMark.text-center {
+        display: none !important;
     }

@@ -27,14 +27,14 @@
                 <div className="footer-bottom">
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-5 col-sm-5 text-left"> © Copyright 2019 <br/> Sr. Seminuevos sitio desarrollado por 
-                                <span className="text-primary"><a href="https://www.sarcuzastudio.com/" target="_blank" rel="noopener noreferrer">Sarcuza studio</a></span> 
+                            <div className="col-md-6 col-sm-6 text-left"> © Copyright 2019  Sr. Seminuevos sitio desarrollado por 
+                                <span className="text-primary"><a href="https://www.sarcuzastudio.com/" target="_blank" rel="noopener noreferrer">&nbsp;Sarcuza studio</a></span> 
                             </div>
-                            <div className="col-md-7 col-sm-7 text-right "> 
+                            <div className="col-md-6 col-sm-6 text-right footerLinks"> 
                                 {/* <a href="aviso-de-privacidad.html"> Aviso de privacidad</a> |  */}
-                                <ProjectLink route = {'aviso-de-privacidad'}> Aviso de Privacidad </ProjectLink> |
-                                <ProjectLink route = {'consejos-de-seguridad'}>&nbsp; Consejos de Seguridad</ProjectLink> |
-                                <a href="on-road-price.html"> &nbsp;NORMA y Prácticas comerciales</a>
+                                <ProjectLink route = {'/aviso-de-privacidad'}>Aviso de Privacidad</ProjectLink> |
+                                <ProjectLink route = {'/consejos-de-seguridad'}> Consejos de Seguridad</ProjectLink> |
+                                <ProjectLink route = {'/norma-y-practicas-comerciales'}> NORMA y Prácticas comerciales</ProjectLink>
                             </div>
                         </div>
                     </div>

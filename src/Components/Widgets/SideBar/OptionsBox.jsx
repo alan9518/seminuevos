@@ -28,18 +28,22 @@
         // Render OptionsBox
         // --------------------------------------
         renderOptionsBox() {
-            const {options} = this.props;
+            const {options, onChange} = this.props;
+
 
             return (
                 <Fragment>
                     <div className="product-brand">
                         {options.map((option)=> {
+							console.log("TCL: OptionsBox -> renderOptionsBox -> option", option)
                             return (
                                 <CheckBoxes 
                                     key = {`chk-${option.label}`} 
                                     id = {`chk-${option.label}`} 
                                     label = {option.label} 
                                     value = {option.value}
+                                    onChange = {onChange}
+                                    checked = {option.checked}
                                 />
                             )
                         })}

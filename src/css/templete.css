@@ -1800,7 +1800,7 @@ footer .footer-bottom .fa-heart {
 
 /* Slide Form */
 .search-car {
-    background-color: rgba(255, 255, 255, 0.95);
+    background-color: rgba(255, 255, 255, 1);
     max-width: 360px;
     box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.3);
     overflow: hidden;
@@ -2699,19 +2699,24 @@ input[type="radio"]+label:hover:before {
     padding: 15px 20px;
 }
 
-.table-col4 .table-head div {
+.table-col2.table-dl>li>div {
+    width: 50%;
+    padding: 15px 20px;
+}
+
+.table-col4 .table-head div, .table-col2 .table-head div {
     color: #fff;
     font-weight: 700;
 }
 
-.table-col4.table-dl>li:nth-child(2n+1) {
+.table-col4.table-dl>li:nth-child(2n+1), .table-col2.table-dl>li:nth-child(2n+1) {
     background: #f9f9f9 none repeat scroll 0 0;
     display: block;
     overflow: auto;
     width: 100%;
 }
 
-.table-dl.table-col4 li.table-head {
+.table-dl.table-col4 li.table-head, .table-dl.table-col2 li.table-head {
     background: #191f23;
 }
 
@@ -3032,4 +3037,12 @@ input[type="radio"]+label:hover:before {
 
 .recent-posts-entry.md .dlab-post-media {
     margin-left: 125px;
+}
+
+
+
+.dlab-post-tags .post-tags {
+    margin: 0 -3px;
+    list-style: none;
+    max-width: 514px;
 }

@@ -1,0 +1,595 @@
+/* ==========================================================================
+ * Form Component Styles 
+ * 22/06/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.fileContainer {
+    box-shadow: none !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+}
+
+.pti-input-group {
+    margin-bottom: 10px;
+}
+
+input[type=text].form-control::placeholder {
+    color: #ced4da !important;
+}
+
+textarea.form-control::placeholder {
+    color: #ced4da !important;
+}
+
+div#pti-fileUploader {
+    position: relative;
+    width: 100%;
+    height: auto;
+    border-width: 2px;
+    border-color: #e76c90;
+    border-style: dashed;
+    border-radius: 5px;
+    padding: 8px 5px;
+}
+
+div#pti-fileUploader p {
+    color: #ced4da !important;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+}
+
+span#peoplePickerResources_TopSpan_InitialHelpText {
+    color: #ced4da !important;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+}
+
+.pti-input-group .btn-primary.dropdown-toggle {
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+    box-shadow: none !important;
+    color: #9e9e9e !important;
+    width: 100%;
+    padding: 9px;
+    text-align: justify;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-transform: capitalize;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+}
+
+select {
+    background-color: #fff !important;
+    background-clip: padding-box !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    color: #9e9e9e !important;
+    width: 100%;
+    padding: 7px;
+    text-align: justify;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    text-transform: capitalize;
+    font-family: "Lato", sans-serif;
+    font-weight: 500;
+}
+
+.btn-primary:not([disabled]):not(.disabled):active,
+.btn-primary:not([disabled]):not(.disabled).active,
+.show>.btn-primary.dropdown-toggle {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    background-color: #fff !important;
+}
+
+button.btn.btn-outline-primary.Ripple-parent {
+    border: 2px solid #5d5386 !important;
+    background-color: transparent !important;
+    color: #5d5386 !important;
+}
+
+.btn-outline-primary:not([disabled]):not(.disabled):active,
+.btn-outline-primary:not([disabled]):not(.disabled).active,
+.show>.btn-outline-primary.dropdown-toggle {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    background-color: transparent !important;
+    border-color: #5d5386 !important;
+}
+
+.pti-navButtons {
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: row;
+    padding: 15px 0;
+    justify-content: center;
+    width: 97%;
+}
+
+/* ==========================================================================
+ * Progress 
+ * 25/06/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.pti-step-container {
+    position: relative;
+    min-height: 100px;
+    display: block;
+    margin-bottom: 2rem;
+    padding: 0 15px;
+}
+
+.pti-step-wizard {
+    display: inline-block;
+    position: relative;
+    width: 100%;
+}
+
+.container-fluid.pti-setWizard {
+    padding-top: 30px;
+}
+
+.pti-step-wizard .pti-progress {
+    position: absolute;
+    top: 23px;
+    height: 8px;
+    left: 0;
+    width: 100%;
+}
+
+.pti-progress {
+    background-color: rgba(52, 40, 104, .07);
+    font-size: .85rem;
+    font-weight: 600;
+}
+
+.pti-step-wizard .pti-progressbar {
+    position: absolute;
+    background-color: #5d5386;
+    height: 8px;
+    border: 0 none;
+    width: 0%;
+    transition: width 0.6s ease;
+}
+
+.pti-step-wizard li {
+    display: inline-block;
+    text-align: center;
+    width: 30%;
+}
+
+.pti-step-wizard li>span {
+    display: block;
+    width: 100%;
+    color: #2c304d;
+    position: relative;
+    text-align: center;
+}
+
+.pti-step-wizard li>span:focus {
+    color: #e76c90;
+    text-decoration: underline;
+}
+
+a.pti-tabCricle,
+i,
+span {
+    display: inline-block;
+    text-decoration: none;
+}
+
+.pti-step-wizard .pti-activeTab .pti-step {
+    color: #fff;
+    background-color: #5d5386;
+    border-color: #5d5386;
+}
+
+.pti-step-wizard li .pti-step {
+    position: absolute;
+    display: inline-block;
+    font-size: 1.2rem;
+    line-height: 42px;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    border: 6px solid;
+    border-color: #5d5386;
+    background: #fff;
+    transition: background-color 0.6s ease, border-color 0.6s ease;
+}
+
+.pti-step-wizard .pti-activeTab .pti-title {
+    color: #e76c90;
+    font-weight: 500;
+}
+
+.pti-step-wizard li .pti-title {
+    position: absolute;
+    width: 100%;
+    left: 28px;
+    padding-top: 60px;
+    color: rgba(52, 40, 104, .4);
+    transition: color 0.6s ease;
+}
+
+input[type="text"].form-control {
+    padding: 5px !important;
+    border: 1px solid #ced4da !important;
+}
+
+/* ==========================================================================
+ * Image Uploader
+ * 25/06/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.pti-imageHolder {
+    width: 100%;
+    height: 100%;
+    /* background: no-repeat center; */
+    position: relative;
+    cursor: pointer;
+    background: #e6e6e6;
+    border-top: 1px solid #cccccc;
+    border-radius: 4px;
+    background-size: contain;
+    position: relative;
+    z-index: 2;
+}
+
+.pti-imageUploader {
+    /* background-image: url(https://flextronics365.sharepoint.com/sites/sandbox/pruebas_alan/SiteAssets/upload.png); */
+    border: none;
+    width: 100%;
+    height: 115px;
+    background-position: center center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+/* ==========================================================================
+  * Date & Resources Component 
+  * 06/07/2018
+  * Alan Medina Silva
+  ========================================================================== */
+
+.pti-resourcesListDates {
+    margin-top: 10px;
+    display: -ms-flexbox;
+    display: flex;
+    padding: 5px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* ==========================================================================
+ * Overwrite DatePicker
+ * 25/06/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.react-datepicker-wrapper {
+    display: inline-block;
+    width: 100%;
+}
+
+.react-datepicker__input-container {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.react-datepicker__input-container>input {
+    position: relative;
+    display: inline-block;
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    -webkit-transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+    -o-transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+    transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out, -webkit-box-shadow .15s ease-in-out;
+}
+
+.react-datepicker {
+    font-family: "Lato", sans-serif;
+    -webkit-box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    background-color: #fff !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--in-selecting-range,
+.react-datepicker__day--in-range {
+    border-radius: 0.3rem;
+    background-color: #5d5386 !important;
+    color: #fff;
+}
+
+div#peoplePickerResources_TopSpan {
+    width: 100%;
+}
+
+/* ==========================================================================
+ * Project Confirmartion Styles 
+ * 28/06/2018
+ * Alan Medina Silva
+ ========================================================================== */
+
+.pti-OverviewSection .pti-tabsContainer {
+    padding: 10px 0;
+}
+
+.pti-OverviewSection {
+    width: 90%;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 0;
+    border: none;
+    margin-bottom: 30px;
+    box-shadow: 0 1px 15px 1px rgba(52, 40, 104, .08);
+}
+
+.pti-rowCenter {
+    padding-bottom: 5px;
+}
+
+.pti-cardTabTitle {
+    color: #e76c90;
+    font-weight: 500;
+    padding-left: 10px;
+}
+
+.pti-panelBody {
+    border-bottom: .07rem solid #eee;
+}
+
+.pti-panelBod .noBorder {
+    border-bottom: none;
+}
+
+.pti-overViewLabel {
+    color: #2c304d;
+    font-weight: 500;
+}
+
+.pti-overViewContent {
+    color: #2c304d;
+    font-weight: 300;
+    width: 100%;
+}
+
+.pti-userContainer {
+    display: -ms-flexbox;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 0;
+}
+
+.pti-userNameList {
+    margin: 0;
+    margin-left: 15px;
+}
+
+.pti-userList {
+    list-style: none;
+    /* flex-grow: 1; */
+    /* flex-basis: 0; */
+    width: 33%;
+}
+
+.pti-userListFull {
+    list-style: none;
+    flex-grow: 1;
+    flex-basis: 0;
+    width: 100%;
+}
+
+span.pti-deleteResButton {
+    cursor: pointer;
+}
+
+.modal-title {
+    margin: 0;
+}
+
+.modal-header .close {
+    text-align: right;
+}
+
+.pti-createdTitle {
+    text-align: center;
+    color: #2c304d;
+    font-weight: 500;
+    font-size: 24px;
+}
+
+.pti-cratedLink {
+    text-align: center;
+    color: #e76c90;
+    font-size: 20px;
+}
+
+/* ==========================================================================
+ *  File Input
+ ========================================================================== */
+
+.dropzone.dz-clickable {
+    cursor: pointer;
+}
+
+div.filepicker {
+    text-align: center;
+    padding: 5px;
+    background-color: transparent;
+    border-radius: 5px;
+    min-height: 60px;
+    border: 2px dashed #C7C7C7;
+}
+
+.dropzone {
+    min-height: 150px;
+    border: 2px solid rgba(0, 0, 0, 0.3);
+    background: white;
+    padding: 20px 20px;
+}
+
+.dropzone,
+.dropzone * {
+    box-sizing: border-box;
+}
+
+.dropzone.dz-started .dz-message {
+    display: none;
+}
+
+.dropzone.dz-clickable .dz-message,
+.dropzone.dz-clickable .dz-message * {
+    cursor: pointer;
+}
+
+.dropzone .dz-message {
+    text-align: center;
+    margin: 2em 0;
+}
+
+.filepicker.dropzone .dz-preview.dz-image-preview {
+    background: none;
+}
+
+.dropzone .dz-preview.dz-image-preview {
+    background: white;
+}
+
+.dropzone .dz-preview {
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin: 16px;
+    min-height: 100px;
+}
+
+.dropzone.dz-clickable * {
+    cursor: default;
+}
+
+.dropzone,
+.dropzone * {
+    box-sizing: border-box;
+}
+
+/* Filepicker CSS */
+.filepicker {
+    font-family: sans-serif;
+}
+
+div.filepicker {
+    text-align: center;
+    padding: 5px;
+    background-color: transparent;
+    border-radius: 5px;
+    min-height: 60px;
+    border: 2px dashed #C7C7C7;
+}
+
+/* Icon */
+.filepicker-file-icon
+{
+    position: relative;
+
+    display: inline-block;
+
+    margin: 1.5em 0 2.5em 0;
+    padding-left: 45px;
+
+    color: black;
+}
+.filepicker-file-icon::before
+{
+    position: absolute;
+    top: -7px;
+    left: 0;
+
+    width: 29px;
+    height: 34px;
+
+    content: '';
+
+    border: solid 2px #7F7F7F;
+    border-radius: 2px;
+}
+.filepicker-file-icon::after
+{
+    font-size: 11px;
+    line-height: 1.3;
+
+    position: absolute;
+    top: 9px;
+    left: -4px;
+
+    padding: 0 2px;
+
+    content: 'file';
+    content: attr(data-filetype);
+    text-align: right;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    color: #fff;
+    background-color: #000;
+}
+.filepicker-file-icon .fileCorner
+{
+    position: absolute;
+    top: -7px;
+    left: 22px;
+
+    width: 0;
+    height: 0;
+
+    border-width: 11px 0 0 11px;
+    border-style: solid;
+    border-color: white transparent transparent #920035;
+}
+
+.slick-slide img {
+    display: block;
+    margin: auto;
+}
+
+.sp-peoplepicker-autoFillContainer {
+    z-index: 100 !important;
+}
+
+
+.pti-pvbProjectCard {
+    background: #fff;
+    border-top-left-radius: calc(.25rem - 1px);
+    border-top-right-radius: calc(.25rem - 1px);
+    height: 100%;
+    margin-top: 10px;
+    padding-bottom: 30px;
+}
+
+.pti-shadow {
+    box-shadow: 0 1px 15px 1px rgba(52,40,104,.08);
+
+}
+
+

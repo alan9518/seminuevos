@@ -8,7 +8,7 @@
 // Import Dependences
 // --------------------------------------
     import React, { Component, Fragment } from "react";
-    import {SmallSlider, IconsGrid, ContactBox, Carrousel, SubHeader, Breadcumbs, StrippedTable} from '../../Components/';
+    import {SmallSlider, IconsGrid, ContactBox,ContactForm, Carrousel, SubHeader, Breadcumbs, StrippedTable, AppLoader} from '../../Components/';
     import {Endpoints} from '../../services/endpoints';
     import axios from 'axios';
     import PropTypes from "prop-types";
@@ -97,10 +97,19 @@
                 imagenesAnuncio : [],
                 anuncioDetails : {},
                 sellerContact : [],
+                showContactForm : false,
+                name : '',
+                mail : '',
+                telephone : '',
+                message : ''
             }
 
         }
 
+
+        // --------------------------------------
+        // LOAD API Data
+        // --------------------------------------
         componentDidMount() {
             this.loadAPI();
         }
@@ -195,8 +204,34 @@
 
 
 
+    
+    /* ==========================================================================
+     *  Handle State
+     ========================================================================== */
 
+        // --------------------------------------
+        // Show/Hide Contact Form
+        // --------------------------------------
+        toggleContactInfo = ()=> {
+            const {showContactForm} = this.state;
+            this.setState({showContactForm : !showContactForm})
+        }
 
+        // --------------------------------------
+        // Control Contact Form Data
+        // --------------------------------------
+
+        handleInputChange = (event)=> {
+			console.log("TCL: Details -> handleInputChange -> event", event.target)
+            const {target} = event;
+			console.log("TCL: Details -> handleInputChange -> target", target)
+            const {value} = target;
+			console.log("TCL: Details -> handleInputChange -> value", value)
+
+            this.setState({
+                [event.target.name]: event.target.value
+            })
+        }
 
 
     /* ==========================================================================
@@ -207,7 +242,8 @@
         // Render SubHeader
         // --------------------------------------
         renderSubHeader() {
-            return <SubHeader headerTtitle = {"Resultados"}/>
+            const {imagen_destacada} = this.state.anuncioDetails
+            return <SubHeader headerTtitle = {"Resultados"} backgroundImage = {imagen_destacada}/>
         }
 
         // --------------------------------------
@@ -230,8 +266,33 @@
         // Contact Box Info
         // --------------------------------------
         renderContactBoxInfo(precio) {
-            return <ContactBox precio = {precio} />
+            const {correo, titulo} = this.state.anuncioDetails;
+            return <ContactBox titulo = {titulo}  precio = {precio} correo = {correo} onClick = {this.toggleContactInfo}/>
         }
+
+
+        // --------------------------------------
+        // Render Contact Form
+        // --------------------------------------
+        renderContactForm () {
+            const {precio, titulo} = this.state.anuncioDetails;
+            const {name, mail, telephone, message} = this.state;
+
+            return (
+                <ContactForm 
+                    titulo = {titulo} 
+                    name = {name} 
+                    mail = {mail} 
+                    telephone = {telephone} 
+                    message ={message} 
+                    precio = {precio}
+                    handleInputChange =  {this.handleInputChange}
+                    cancel = {this.toggleContactInfo}
+                />
+            )
+        }
+
+
 
         // --------------------------------------
         // Render Related Products
@@ -271,7 +332,7 @@
         // Render Details
         // --------------------------------------
         renderDetails() {
-            const {anuncioDetails} = this.state;
+            const {anuncioDetails, showContactForm} = this.state;
             const {titulo, ubicacion, created_at, precio} =  anuncioDetails;
             return  (
                 <Fragment >
@@ -305,7 +366,7 @@
                                             
                                             <div className="clearfix m-t30">
                                             {/* Info Tab */}
-                                                <StrippedTable/>
+                                                <StrippedTable data = {anuncioDetails} />
                                                 
                                             </div>
                                             { /* Modal*/ }
@@ -339,7 +400,7 @@
                                         
                                         <div className="col-md-4">
 
-                                            {this.renderContactBoxInfo(precio)}
+                                            {showContactForm === true ? this.renderContactForm() : this.renderContactBoxInfo(precio)}
                                             {this.renderFeatures()}
 
                                         </div>
@@ -355,7 +416,7 @@
                                                 
                                             </div>
                                         {/* Related Products */}
-                                        {this.renderRelatedProducts()}
+                                        {/*this.renderRelatedProducts()*/}
                                         </div>
                                     </div>
                             
@@ -367,13 +428,20 @@
            
         }
 
+        renderLoader (isTransparent) {
+            const container = document.getElementsByClassName('int-formFieldsContainer')[0]
+            const containerWidth = isTransparent ? container.clientWidth : null;
+            const containerHeight = isTransparent ? container.clientHeight : null;
+            return <div> <AppLoader customHeight = { containerHeight || 800} isTransparent = {isTransparent} customWidth = {containerWidth}/> </div>
+        }
+
 
         // --------------------------------------
         // Render Component
         // --------------------------------------
         render() {
             const {isLoaded} = this.state;
-            return isLoaded ? this.renderDetails() : null ;
+            return isLoaded ? this.renderDetails() : this.renderLoader() ;
         }
     }
 

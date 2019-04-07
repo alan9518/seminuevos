@@ -17,7 +17,7 @@
 // --------------------------------------
     const AppButton = (props) => {
 
-        const {buttonText} =  props;
+        const {buttonText, buttonClass, onClick} =  props;
 
         // --------------------------------------
         // Render Component
@@ -26,8 +26,10 @@
             <Fragment>
                 <button 
                     type="button" 
-                    className="btn-primary site-button btn-block" 
-                    title = {buttonText} >
+                    // className="btn-primary site-button btn-block" 
+                    className = {buttonClass}
+                    title = {buttonText} 
+                    onClick = {props.onClick}>
                     {buttonText} 
                 </button>
             </Fragment>

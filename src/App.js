@@ -8,7 +8,8 @@
 // Imports
 // --------------------------------------
   import React, { Component } from 'react';
-  import {BrowserRouter, Route, Switch} from 'react-router-dom';
+  import createBrowserHistory from 'history/createBrowserHistory'
+  import {Router, Route, Switch} from 'react-router-dom';
   import appNavigationRoutes from './Routes/index'
   import './App.css';
   
@@ -24,8 +25,9 @@
       // on Routes/Index
       // --------------------------------------
       renderApp() {
+        const history = createBrowserHistory();
         return (
-          <BrowserRouter>
+          <Router history={history}>
             <Switch>
 
                 {appNavigationRoutes.map((appRoute, key)=> {
@@ -33,7 +35,7 @@
                 })}
 
             </Switch>
-          </BrowserRouter>
+          </Router>
         )
       }
 

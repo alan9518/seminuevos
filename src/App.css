@@ -1508,7 +1508,7 @@ dl dd {
 }
 
 .bg-gray {
-  background-color: #f5f6f6;
+  background-color: #f7f7fa ;
 }
 
 .bg-gray-dark {
@@ -4367,6 +4367,7 @@ blockquote:before {
 }
 
 .dlab-bnr-inr {
+  /* background-image: url('./images/background/bgList.jpg'); */
   background-position: center center;
   background-size: cover;
   display: table;
@@ -4377,7 +4378,7 @@ blockquote:before {
 }
 
 .dlab-bnr-inr:before {
-  background: #e82527 none repeat scroll 0 0;
+  /* background: #e82527 none repeat scroll 0 0; */
   border-radius: 100%;
   top: 20%;
   content: "";
@@ -10605,6 +10606,7 @@ footer .widget_getintuch i {
 
 .footer-top {
   background-color: #191F23;
+  /* background-color: #fff; */
   background-size: cover;
   background-position: center;
   padding: 50px 0 20px;
@@ -11984,4 +11986,32 @@ Spacing End Alignment
 
 .sm-footerRow {
   padding-top: 20px;
+}
+
+
+div#fbplugins {
+  padding-top: 20px;
+}
+
+.homeFooter footer.site-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+}
+
+.search-car {
+  margin-bottom: 170px;
+}
+
+.sm-fullScreenSlider {
+  padding-bottom: 200px;
+}
+
+.sm-fullScreenSlider {
+  padding-bottom: 0px;
+}
+
+#appView .powrMark.text-center {
+  display: none !important;
 }

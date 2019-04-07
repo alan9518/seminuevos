@@ -12,6 +12,17 @@
     import {Header,TopHeader, StickyHeader, SubHeader, Footer, FooterBottom, SideBar} from '../Layouts/index';    
 
 
+
+// --------------------------------------
+// Import Form Steps
+// --------------------------------------
+    // import NewAnuncioFormContainer from '../Views/Anuncios/Steps/NewAnuncioFormContainer';
+    // import AnuncioDetails from '../Views/Anuncios/Steps/AnuncioDetails';
+    // import ProjectDetails from '../Views/Anuncios/Steps/ProjectDetails'
+    // import NewAnuncioFormContainer from '../Views/Anuncios/Steps/NewAnuncioFormContainer'
+    import AnuncioConfimation from '../Views/Anuncios/AnuncioConfimation'
+
+
 // --------------------------------------
 // Import Components
 // --------------------------------------
@@ -35,6 +46,14 @@
     import ResultsGrid from './ResultsGrid/ResultsGrid';
     import Form from './Form/Form'  ;
     import StrippedTable from './Table/StrippedTable'
+    // import ImagesAnuncio from '../Views/Anuncios/Steps/ImagesAnuncio';
+
+    import BodyCard from './Cards/BodyCard';
+    import CardContainer from './Cards/CardContainer';
+    import FooterCard from './Cards/FooterCard';
+    import ImageCard from './Cards/ImageCard';
+    import FilesManager from './FilesManager/FilesManager'
+    import AppLoader from './Loader/Loader';
 
 
 // --------------------------------------
@@ -47,8 +66,14 @@
     import OptionsBox from './Widgets/SideBar/OptionsBox';
     import RangeSelect from './Widgets/SideBar/RangeSelect';
     import ContactBox from './Widgets/ContactBox/ContactBox';
+    import ContactForm from './Widgets/ContactBox/ContactForm';
     import IconsGrid from './Widgets/IconsGrid/IconsGrid';
-
+    import PriceTable from './Widgets/PriceTable/PriceTable';
+    import FacebookFeed from './Widgets/FacebookFeed/FacebookFeed';
+    import AnuncioLabel from './Widgets/CustomLabel/AnuncioLabel' ;
+    import Pagination from './Widgets/Pagination/Pagination';
+    import PaginationItem from './Widgets/Pagination/PaginationItem';
+    
 
 // --------------------------------------
 // Export Components
@@ -65,7 +90,6 @@
         FooterBottom,
         FloatingSearch,
         SideBar,
-        
         // --------------------------------------
         // Components
         // --------------------------------------
@@ -90,11 +114,30 @@
         ResultsSorting,
         AppButton,
         ContactBox,
+        ContactForm,
         ProductCard,
         Carrousel,
         IconsGrid,
         ResultsGrid,
         Form,
         StrippedTable,
+        BodyCard,
+        CardContainer,
+        FooterCard,
+        ImageCard,
+        PriceTable,
+        FilesManager,
+        AppLoader,
+        FacebookFeed,
+        AnuncioLabel,
+        Pagination,
+        PaginationItem,
+        // --------------------------------------
+        // Form Steps
+        // --------------------------------------
+        AnuncioConfimation
+        // NewAnuncioFormContainer,
+        // AnuncioDetails,
+        // ImagesAnuncio
     }
 

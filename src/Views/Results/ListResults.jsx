@@ -9,8 +9,9 @@
     import React, { Component, Fragment } from "react";
     import PropTypes from "prop-types";
     import {Endpoints} from '../../services/endpoints';
+    import bgImage from '../../images/header/resultadosBG.jpg';
     import axios from 'axios';
-    import {SubHeader, SideBar, Breadcumbs, ResultsList, ResultsSorting, ResultsGrid} from '../../Components/'
+    import {SubHeader, SideBar, Breadcumbs, ResultsList, ResultsSorting, ResultsGrid, AppLoader,Pagination} from '../../Components/'
     
 // --------------------------------------
 // Create Component Class
@@ -24,57 +25,6 @@
             super(props);
             this.state = {
                 listLayout : true,
-                carsList : [
-                    {
-                        id : 1 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic1.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    {
-                        id : 2 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic2.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    {
-                        id : 1 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic1.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    
-                ],
                 sortingOptions : [
                     {label : 'Precio: mas bajo al mas alto' , value : 1},
                     {label : 'Precio: mas alto al mas bajo' , value : 2},
@@ -82,7 +32,11 @@
                     {label : 'Nombre: Z a la  A' , value : 4},
                 ],
                 searchResults : [],
-                isLoaded : false
+                currentPage : 1,
+                resultsCount : 0,
+                isLoaded : false,
+                loadingData : false,
+                itemsPerPage : 6
             }
         }
 
@@ -99,9 +53,13 @@
         // GET All Requests
         // --------------------------------------
         async loadAPI() {
+            const anunciosCount =  await this.getAnunciosCount();
             const anunciosData =  await this.getAnunciosData();
+            
+			console.log("TCL: ListResults -> loadAPI -> anunciosCount", anunciosCount)
             this.setState({
                 searchResults : anunciosData,
+                anunciosCount: anunciosCount.count,
                 isLoaded : true
             })
         }
@@ -112,18 +70,51 @@
         // With Promises
         // @returns {An Promise Object}
         // --------------------------------------*/
-        async getAnunciosData() {
-            const settings = { 
+        async getAnunciosData(page) {
+			console.log("TCL: ListResults -> getAnunciosData -> page", page)
+            
+            const {currentPage, itemsPerPage} = this.state
+
+            // !page ? page = '1' : page
+            const pageToSeach = page !== undefined ? page  : '1'
+			console.log("TCL: ListResults -> getAnunciosData -> pageToSeach", pageToSeach)
+
+            const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
                 headers : { 
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
+                },
+                params : {
+                    page : page || currentPage,
+                    items : itemsPerPage
                 }
-            }
-            const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, {settings});
+            });
             const anunciosData = await loadAnunciosPromise.data;
             // const ubicacionData = this.formatSelectValues(anunciosData);
         
             return anunciosData;
+        }
+
+
+        
+        /** --------------------------------------
+        // Get Anuncios Data
+        // With Promises
+        // @returns {An Promise Object}
+        // --------------------------------------*/
+        async getAnunciosCount() {
+
+            const anunciosCountPromise = await axios.get(Endpoints.getAnunciosCount, { 
+                headers : { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                }
+                
+            });
+            const anunciosCount = await anunciosCountPromise.data;
+            // const ubicacionData = this.formatSelectValues(anunciosCount);
+        
+            return anunciosCount;
         }
 
 
@@ -139,8 +130,39 @@
         changelistLayout = (e) => {
             const {listLayout} = this.state;
             this.setState({
-                listLayout : !listLayout
+                listLayout : !listLayout,
+                currentPage : 1,
+                itemsPerPage : 6
             })
+        }
+
+        // --------------------------------------
+        // Change Page
+        // Load Prev/Next Page
+        // --------------------------------------
+        onPageitemCick = (event)=> {
+            event.preventDefault();
+            const {value} = event.target;
+          
+
+            this.setState({loadingData : true})
+
+            // Update Data
+            this.getAnunciosData(value).then((data)=> {
+                console.log("TCL: ListResults -> onPageitemCick -> resultsData", data)
+                this.setState({
+                    currentPage : value,
+                    searchResults : data,
+                    loadingData : false,
+                    itemsPerPage : 6
+                })
+            })
+			
+
+            
+          
+
+
         }
 
 
@@ -153,7 +175,10 @@
         // Render SubHeader
         // --------------------------------------
         renderSubHeader() {
-            return <SubHeader headerTtitle = {"Resultados"}/>
+            return <SubHeader 
+                headerTtitle = {"Resultados"}
+                backgroundImage = {bgImage}
+            />
         }
 
         // --------------------------------------
@@ -169,6 +194,15 @@
         // --------------------------------------
         renderSideBar() {
             return <SideBar sideBarTitle = {"Filtros de Búsqueda"}/>
+        }
+
+        // --------------------------------------
+        // Render Pagination
+        // --------------------------------------
+        renderPagination() {
+            const {currentPage, anunciosCount, itemsPerPage} = this.state;
+			console.log("TCL: ListResults -> renderPagination -> anunciosCount", anunciosCount)
+            return <Pagination currentPage = {currentPage} dataCount = {anunciosCount} onItemClick = {this.onPageitemCick} itemsPerPage = {itemsPerPage}/>
         }
 
         // --------------------------------------
@@ -200,6 +234,7 @@
         renderResultsGrid() {
             
             const {searchResults} = this.state;
+			console.log("TCL: ListResults -> renderResultsGrid -> searchResults", searchResults)
             return <ResultsGrid searchResults = {searchResults || [] }/>
         }
 
@@ -241,15 +276,7 @@
                                             </div>
                                             
                                             
-                                            <div className = "pagination-bx col-lg-12 clearfix ">
-                                                <ul className = "pagination">
-                                                    <li className = "previous"><a href="#"><i className = "fa fa-angle-double-left"></i></a></li>
-                                                    <li className = "active"><a href="#">1</a></li>
-                                                    <li><a href="#">2</a></li>
-                                                    <li><a href="#">3</a></li>
-                                                    <li className = "next"><a href="#"><i className = "fa fa-angle-double-right"></i></a></li>
-                                                </ul>
-                                            </div>
+                                            {this.renderPagination()}
                                             
                                         </div>
                                     </div>
@@ -264,11 +291,21 @@
 
 
         // --------------------------------------
+        // Render Loader
+        // --------------------------------------
+            renderLoader (isTransparent) {
+                const container = document.getElementsByClassName('int-formFieldsContainer')[0]
+                const containerWidth = isTransparent ? container.clientWidth : null;
+                const containerHeight = isTransparent ? container.clientHeight : null;
+                return <div> <AppLoader customHeight = { containerHeight || 800} isTransparent = {isTransparent} customWidth = {containerWidth}/> </div>
+            }
+
+        // --------------------------------------
         // Render Component
         // --------------------------------------
         render() {
-            const {isLoaded } = this.state
-            return isLoaded && this.renderListView();
+            const { isLoaded } = this.state;
+            return isLoaded ?  this.renderListView() : this.renderLoader();
         }
     }
 

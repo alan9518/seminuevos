@@ -9,6 +9,7 @@
 // --------------------------------------
     import React, { Component, Fragment }  from 'react'
     import {SubHeader, Breadcumbs} from '../../Components/'
+    import bgImage from '../../images/header/privacidadBG2.jpg'
     import PropTypes from 'prop-types'
 
 
@@ -22,7 +23,10 @@
         // Render SubHeader
         // --------------------------------------
         renderSubHeader() {
-            return <SubHeader headerTtitle = {'Nuestro Aviso de Privacidad'} />
+            return <SubHeader 
+                headerTtitle = {'Nuestro Aviso de Privacidad'} 
+                backgroundImage = {bgImage}
+            />
         }
 
         // --------------------------------------

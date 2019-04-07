@@ -83,12 +83,26 @@
             // --------------------------------------*/
             async getAnunciosData() {
                 const settings = { 
+					
                     headers : { 
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
+                    },
+                    params : {
+                        page : '1'
                     }
                 }
-                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, {settings});
+                
+                console.log("TCL: getAnunciosData -> settings", settings)
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        page : '1'
+                    }
+                });
                 const anunciosData = await loadAnunciosPromise.data;
             
                 return anunciosData;
@@ -231,7 +245,7 @@
             const {modelos, selectedModelo, precioBase, precioTope, redirectUser, searchResults} = this.state
 
             if (redirectUser) {
-                return <Redirect to={{ pathname: '/resultados', searchResults: {searchResults}}} />
+                return <Redirect to={{ pathname: '/Demo2/resultados', searchResults: {searchResults}}} />
             }
             
 
@@ -309,15 +323,22 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            
                                             
                                             <div className = "input-group">
                                                 <button className = "site-button button-lg btn-block" type="submit">Buscar</button>
 
                                             </div>
+                                            
                                             <div className = "input-group text-center">
 
                                                 
-
+                                              {      /*<ProjectLink route = {`/Demo2/resultados`}>
+                                                        <button className = "site-button button-lg btn-block" type="submit">Buscar</button>
+                                                    </ProjectLink  >
+                                            
+                                                */}
                                                 {// <ProjectLink route = {`/resultados`}>
                                                 //     <span className = "site-button-link">
                                                 //         B&uacute;squeda Avanzada 
@@ -334,8 +355,8 @@
                         </div>
                     </div>	
                 
-                <div className="clearfix"></div>
-            </Fragment>
+                    <div className="clearfix"></div>
+                </Fragment>
             )
         }
 
@@ -346,7 +367,7 @@
             const {isLoaded} = this.state;
             return isLoaded && this.renderSearchBox();
         }
-    }
+}
 
 // --------------------------------------
 // Define PropTypes

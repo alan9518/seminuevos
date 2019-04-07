@@ -16,13 +16,15 @@
 // --------------------------------------
     const SubHeader = (props) => {
 
-        const {headerTtitle} = props;
+        const {headerTtitle, backgroundImage} = props;
         // --------------------------------------
         // Render Component
+        // <div className = "dlab-bnr-inr overlay-black-middle" style={{backgroundImage: 'http://carzone.dexignlab.com/xhtml/images/banner/bnr3.jpg'}}></div>
         // --------------------------------------
         return (
             <Fragment>
-                <div className = "dlab-bnr-inr overlay-black-middle" style={{backgroundImage: 'http://carzone.dexignlab.com/xhtml/images/banner/bnr3.jpg'}}>
+                
+                <div className = "dlab-bnr-inr overlay-black-middle" style={{backgroundImage: `url(${backgroundImage})`}}>
                     <div className = "container">
                         <div className = "dlab-bnr-inr-entry">
                             <h1 className = "text-white">{headerTtitle}</h1>

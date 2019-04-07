@@ -24,6 +24,7 @@
 // --------------------------------------
     const CheckBoxes = (props) => {
         const {id, label, value, onChange, checked} = props;
+		console.log("TCL: CheckBoxes -> checked", checked)
 
         // --------------------------------------
         // Render Component
@@ -31,7 +32,7 @@
         return ( 
             <Fragment> 
                 <div className="search-content" >
-					<input id={id} type="checkbox" checked = {checked} onChange = {onChange}/>
+					<input id={id} type="checkbox" checked = {checked} onChange = {onChange} value  = {value}/>
 					<label htmlFor={id} className="search-content-area">{label} </label>
 				</div>
             </Fragment>
