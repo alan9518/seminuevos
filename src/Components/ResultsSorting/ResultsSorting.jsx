@@ -8,7 +8,7 @@
 // Import Dependences
 // --------------------------------------
     import React, { Component, Fragment }  from 'react';
-    import {SingleSelect} from '../../Components';
+    import Select from 'react-select';
     import PropTypes from 'prop-types'
 
 
@@ -21,9 +21,9 @@
         // --------------------------------------
         // Constructor
         // --------------------------------------
-        constructor(props) {
-            super(props);
-        }
+        // constructor(props) {
+        //     super(props);
+        // }
 
 
         // --------------------------------------
@@ -47,12 +47,27 @@
                     <div className = "filter-bar clearfix m-b30 p-lr15">
 
                             <div className = "pull-left  max-w400 ">
-                                <SingleSelect 
+                               { /*<SingleSelect 
                                     defaultValue = {sortingOptions[0]}
                                     isClearable={false}
                                     isSearchable={false}
                                     options={sortingOptions}
                                     name = {'sortingSelect'}
+                               />*/}
+
+
+                                <Select
+                                    className="basic-single"
+                                    classNamePrefix="select"
+                                    defaultValue={sortingOptions[0]}
+                                    isClearable={false}
+                                    isSearchable={true}
+                                    name={'filterSelect'}
+                                    id = {"filter"}
+                                    inputId  = {"filter"}
+                                    value={this.props.selectedFilter}
+                                    onChange={this.props.onSelectChange}
+                                    options={(sortingOptions)}
                                 />
                             </div>
 

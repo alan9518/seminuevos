@@ -26,12 +26,14 @@
             this.state = {
                 listLayout : true,
                 sortingOptions : [
-                    {label : 'Precio: mas bajo al mas alto' , value : 1},
-                    {label : 'Precio: mas alto al mas bajo' , value : 2},
-                    {label : 'Nombre: A a la Z' , value : 3},
-                    {label : 'Nombre: Z a la  A' , value : 4},
+                    {label : 'Fecha: mas recientes' , value : 'highDate'},
+                    {label : 'Precio: mas bajo al mas alto' , value : 'lowPrice'},
+                    {label : 'Precio: mas alto al mas bajo' , value : 'HighPrice'},
+                    {label : 'Nombre: A a la Z' , value : 'tituloAsc'},
+                    {label : 'Nombre: Z a la  A' , value : 'tituloDesc'},
                 ],
                 searchResults : [],
+                selectedFilter :  {label : 'Fecha: mas recientes' , value : 'highDate'},
                 currentPage : 1,
                 resultsCount : 0,
                 isLoaded : false,
@@ -70,15 +72,8 @@
         // With Promises
         // @returns {An Promise Object}
         // --------------------------------------*/
-        async getAnunciosData(page) {
-			console.log("TCL: ListResults -> getAnunciosData -> page", page)
-            
+        async getAnunciosData(page = 1, sortBy = 'highDate') {
             const {currentPage, itemsPerPage} = this.state
-
-            // !page ? page = '1' : page
-            const pageToSeach = page !== undefined ? page  : '1'
-			console.log("TCL: ListResults -> getAnunciosData -> pageToSeach", pageToSeach)
-
             const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
                 headers : { 
                     'Content-Type': 'application/json',
@@ -86,11 +81,11 @@
                 },
                 params : {
                     page : page || currentPage,
-                    items : itemsPerPage
+                    items : itemsPerPage,
+                    sortBy : sortBy
                 }
             });
             const anunciosData = await loadAnunciosPromise.data;
-            // const ubicacionData = this.formatSelectValues(anunciosData);
         
             return anunciosData;
         }
@@ -143,27 +138,60 @@
         onPageitemCick = (event)=> {
             event.preventDefault();
             const {value} = event.target;
-          
+            const {selectedFilter} = this.state;
+            let newPage = this.state.currentPage;
+			
+            console.log("TCL: ListResults -> onPageitemCick -> value", value)
+            
+            // const newPage = value
+            switch(value) {
+                case 'next' : newPage +=1; 
+                    break;  
+                case 'prev' : newPage -=1; 
+                    break;  
+                default : newPage = parseInt(value);
+            }
+
+            
+            
 
             this.setState({loadingData : true})
 
+            console.log("TCL: ListResults -> onPageitemCick -> newPage", newPage)
+
             // Update Data
-            this.getAnunciosData(value).then((data)=> {
-                console.log("TCL: ListResults -> onPageitemCick -> resultsData", data)
+            this.getAnunciosData(newPage,selectedFilter.value).then((data)=> {
+                
                 this.setState({
-                    currentPage : value,
+                    currentPage : parseInt(newPage),
                     searchResults : data,
                     loadingData : false,
                     itemsPerPage : 6
                 })
             })
-			
-
-            
-          
-
-
         }
+
+        // --------------------------------------
+        // Handle Filter Select Change
+        // Load Date Based on the Filter
+        // --------------------------------------
+        handleFilterSelectChange = (selectedFilter) => {
+        
+            const {value} = selectedFilter;
+
+                this.getAnunciosData(1, value)
+                    .then((data) => {
+						
+                        this.setState({
+                            currentPage : 1,
+                            selectedFilter: selectedFilter,
+                            searchResults: data,
+                            
+                        })
+
+                    })
+
+            }
 
 
     /* ==========================================================================
@@ -201,7 +229,6 @@
         // --------------------------------------
         renderPagination() {
             const {currentPage, anunciosCount, itemsPerPage} = this.state;
-			console.log("TCL: ListResults -> renderPagination -> anunciosCount", anunciosCount)
             return <Pagination currentPage = {currentPage} dataCount = {anunciosCount} onItemClick = {this.onPageitemCick} itemsPerPage = {itemsPerPage}/>
         }
 
@@ -209,10 +236,12 @@
         // Results Sorting
         // --------------------------------------
         renderResultsSorting() {
-            const {sortingOptions, listLayout} = this.state;
+            const {sortingOptions, listLayout, selectedFilter} = this.state;
             return <ResultsSorting 
                             sortingOptions = {sortingOptions} 
                             onClick = {this.changelistLayout}
+                            selectedFilter = {selectedFilter}
+                            onSelectChange = {this.handleFilterSelectChange}
                             listActive =  {listLayout}/>
         }
 

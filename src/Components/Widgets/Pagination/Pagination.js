@@ -67,7 +67,7 @@
                         currentPage > 1 &&   <PaginationItem  
                                                 key = {`pagItem-prev`} 
                                                 onItemClick = {props.onItemClick} 
-                                                pageCounter = {currentPage} 
+                                                pageCounter = {'prev'} 
                                                 showArrow = {true}
                                                 arrowPosition = {'left'}
                                                 isActive = { false}
@@ -79,10 +79,10 @@
 
                     {
                         // currentPage <= end_loop && <li class="next"><a href="#"><i class="fa fa-angle-double-right"></i></a></li>
-                        currentPage <= end_loop && <PaginationItem  
+                        currentPage < end_loop && <PaginationItem  
                                                 key = {`pagItem-next`} 
                                                 onItemClick = {props.onItemClick} 
-                                                pageCounter = {currentPage} 
+                                                pageCounter = {'next'} 
                                                 showArrow = {true}
                                                 arrowPosition = {'right'}
                                                 isActive = { false}
