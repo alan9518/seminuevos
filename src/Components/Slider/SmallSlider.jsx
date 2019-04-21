@@ -36,6 +36,7 @@ class SmallSlider extends Component {
     renderSlider() {
         const baseUrl = 'http://carzone.dexignlab.com/xhtml/images/blog/grid'
         const {imagesData} = this.props;
+		console.log("TCL: SmallSlider -> renderSlider -> imagesData", imagesData)
         const settings = {
             customPaging: function(i) {
                 return (
@@ -62,10 +63,13 @@ class SmallSlider extends Component {
         };
 
         return (
+            
             <div className = "sm-smallSlider">
                 <Slider {...settings}>
                 {
+                    
                     imagesData && imagesData.map((image)=> {
+						
                         return (
                             <div>
                                 <img src={image.ruta_imagen} />

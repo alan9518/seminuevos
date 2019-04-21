@@ -15,8 +15,8 @@
 // --------------------------------------
 // Create Component
 // --------------------------------------
-    const Breadcumbs = () => {
-
+    const Breadcumbs = (props) => {
+        const {previousName} = props;
         // --------------------------------------
         // Render Component
         // --------------------------------------
@@ -26,6 +26,7 @@
                     <div className = "container">
                         <ul className = "list-inline">
                             <li><ProjectLink route={''}>Inicio</ProjectLink></li>
+                            {previousName && <li><ProjectLink route={''}>{previousName}</ProjectLink></li>}
                             {/* <li>Resultados</li> */}
                         </ul>
                     </div>

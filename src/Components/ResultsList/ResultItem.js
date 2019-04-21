@@ -7,8 +7,8 @@
 // --------------------------------------
 // Import Dependences
 // --------------------------------------
-    import React, { Component, Fragment }  from 'react';
-    import {ProjectLink} from '../../Components/'
+    import React, { Fragment }  from 'react';
+    import {ProjectLink, Destacado} from '../../Components'
     import PropTypes from 'prop-types'
 
 
@@ -22,17 +22,16 @@
         // --------------------------------------
         // Extract Vehicle
         // --------------------------------------
-            const {vehicle} =  props;
-			console.log('TCL: ResultItem -> vehicle', vehicle)
+            const {vehicle, isFeatured} =  props;
+			
             const {id_anuncio, id, titulo, precio, imagen_destacada, shortDescription, year , kilometraje, transmision, equipamento } = vehicle;
-			console.log("TCL: ResultItem -> equipamento", equipamento)
-            // console.log('meta', meta);
-
+			
+         
 
 
             const renderEquipamento = (equipamento)=> {
                 const equipamentoArray = equipamento.split(',');
-				// console.log("TCL: renderEquipamento -> equipamentoArray", equipamentoArray)
+				
                 return equipamentoArray.map((equipo)=> {
                     return <span> {equipo}  </span>
                 })
@@ -43,12 +42,10 @@
                     return imagen_destacada
                 else{
                     let imagenNameArray =  imagen_destacada.split('../');
-                    // console.log("TCL: setImagenDestacada -> imagenNameArray", imagenNameArray)
+                   
                     let imagenRelativeRouteName = imagenNameArray[2];
                     let imageRoute = `http://localhost:8080/SR_seminuevos/backendFinal/${imagenRelativeRouteName}`;
-					// console.log("TCL: setImagenDestacada -> imageRoute", imageRoute)
-                    // console.log("TCL: setImagenDestacada -> imagenRelativeRouteName", imagenRelativeRouteName)
-                    
+				
                     return imageRoute
                 }
             }
@@ -62,6 +59,7 @@
            
             <Fragment> 
                 <div className = "blog-post blog-md clearfix date-style-2 list-view m-b30">
+                    {isFeatured && <Destacado/>}
                     <div className = "dlab-post-media dlab-img-effect zoom-slow"> 
                         <ProjectLink route  = {`/anuncio/${id_anuncio}`}>
                             <img src= {setImagenDestacada(imagen_destacada)}  alt=""/>

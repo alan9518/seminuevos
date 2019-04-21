@@ -16,6 +16,7 @@
  // Create Component
  // --------------------------------------
     const ProductCard = (props) => {
+	console.log("TCL: ProductCard -> props", props)
 
     
         const {titulo,id_anuncio,imagen_destacada, precio,year, transmision, kilometraje} = props.vehicle;
@@ -28,7 +29,7 @@
                 <div className="dlab-feed-list">
                     <div className="dlab-media"> 
                         <ProjectLink route  = {`/anuncio/${id_anuncio}`}>
-                            <img src= {imagen_destacada} alt=""/> 
+                            <img src= {imagen_destacada} alt = {titulo} style = {{maxHeight : 240}}/> 
                         </ProjectLink>
                     	
                     </div>

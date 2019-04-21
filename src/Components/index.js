@@ -75,6 +75,7 @@
     import PaginationItem from './Widgets/Pagination/PaginationItem';
     import ActiveFilters from './Widgets/ActiveFilters/ActiveFilters';
     import FilterItem from './Widgets/ActiveFilters/FilterItem';
+    import Destacado from './Widgets/Destacados/Destacado' ;
 
 // --------------------------------------
 // Export Components
@@ -135,6 +136,7 @@
         PaginationItem,
         ActiveFilters,
         FilterItem,
+        Destacado,
         // --------------------------------------
         // Form Steps
         // --------------------------------------

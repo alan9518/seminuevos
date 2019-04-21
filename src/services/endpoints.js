@@ -67,6 +67,14 @@
         // --------------------------------------*/
             getAnuncioDetails : `${path}/Anuncios/getAnuncioDetails.php`,
             // getAnuncioDetails : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Anuncios/getAnuncioDetails.php',
+
+
+         /** --------------------------------------
+        // Get Anuncio Details
+        // @param {relatedMarca <int>}
+        // --------------------------------------*/
+            getRelatedAnuncios : `${path}/Anuncios/getRelatedAnuncios.php`,
+        
         
         /** --------------------------------------
         // Get Images Details

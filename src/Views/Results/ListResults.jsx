@@ -56,15 +56,10 @@
             const searchValues = queryString.parse(search);
 			console.log("TCL: ListResults -> componentDidMount -> searchValues", searchValues)
 
-            // const params = new URLSearchParams(search)
-
-            // params.get('tipo');
-			// console.log("TCL: ListResults -> componentDidMount -> params.get('tipo')", params.get('tipo'))
-
-			// console.log("TCL: ListResults -> componentDidMount -> params", params)
-            // console.log("TCL: ListResults -> componentDidMount -> search", search)
+            // const currentFilters =  searchValues.filter(filter=> filter !== 'nan')
+			// console.log("TCL: ListResults -> componentDidMount -> currentFilters", currentFilters)
             
-            this.loadAPI();
+            this.loadAPI(searchValues);
         }
     
 
@@ -75,12 +70,14 @@
         // --------------------------------------
         // GET All Requests
         // --------------------------------------
-        async loadAPI() {
+        async loadAPI(searchValues) {
 
             
 
             const anunciosCount =  await this.getAnunciosCount();
-            const anunciosData =  await this.getAnunciosData();
+            // const anunciosData =  await this.getAnunciosData();
+
+            const anunciosData =  await this.getAnunciosDataWithSearchParams(searchValues);
            
             this.setState({
                 searchResults : anunciosData,
@@ -99,7 +96,7 @@
 
 
             /** --------------------------------------
-            // Get Anuncios Data
+            // Get Anuncios Data, all Vlaues
             // With Promises
             // @returns {An Promise Object}
             // --------------------------------------*/
@@ -120,6 +117,32 @@
             
                 return anunciosData;
             }
+
+
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnunciosDataWithSearchParams(searchParams, page = 1, sortBy = 'highDate') {
+                const {currentPage, itemsPerPage} = this.state
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        page : page || currentPage,
+                        items : itemsPerPage,
+                        sortBy : sortBy,
+                        location : 'jalisco'
+                    }
+                });
+                const anunciosData = await loadAnunciosPromise.data;
+            
+                return anunciosData;
+            }
+
 
 
             

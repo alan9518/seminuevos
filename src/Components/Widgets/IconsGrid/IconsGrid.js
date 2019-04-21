@@ -19,6 +19,26 @@
 
         const {year, kilometraje,tipo_combustible, estilo_carroceria, propietarios, transmision} =  props;
 
+
+        const types = [
+            {name : 'coupe', icon : 'flaticon-car'},
+            {name : 'compacto', icon : 'flaticon-car-1'},
+            {name : 'crossover', icon : 'flaticon-car-3'},
+            {name : 'descaptoable', icon : 'flaticon-car-2'},
+            {name : 'furgoneta', icon : 'flaticon-car-5'},
+            {name : 'minvan', icon : 'flaticon-car-6'},
+            {name : 'suv', icon : 'flaticon-car-2'},
+            {name : 'sedan', icon : 'flaticon-car-8'},
+            {name : 'pickup', icon : 'flaticon-pickup-truck'}
+            
+        ]
+
+
+        const getCarIcon = (carroceria)=> {
+            const iconObject = types.filter((carr)=> carr.name === carroceria.toLowerCase())[0]
+            return iconObject.icon;
+        }
+
         // --------------------------------------
         // Render Component
         // --------------------------------------
@@ -46,12 +66,12 @@
                         <span>Propietarios</span>	
                     </div>
                     <div className="car-features">
-                        <i className="flaticon-calendar"></i>
+                        <i className="flaticon-dashboard"></i>
                         <h5>{transmision}</h5>
                         <span>Transmision</span>	
                     </div>
                     <div className="car-features">
-                        <i className="flaticon-car-key"></i>
+                        <i className = {getCarIcon(estilo_carroceria)}></i>
                         <h5>{estilo_carroceria}</h5>
                         <span>Carroceria</span>	
                     </div>

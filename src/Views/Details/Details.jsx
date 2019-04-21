@@ -26,74 +26,7 @@
             super(props);
             this.state = {
                 details : {},
-                relatedProducts : [
-                    {
-                        id : 1 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic1.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    {
-                        id : 2 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic2.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    {
-                        id : 1 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic1.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    {
-                        id : 1 , 
-                        title : 'GTA 5 Lowriders DLC', 
-                        price :  '25000', 
-                        img : 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic1.jpg',
-                        shortDescription : "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy",
-                        meta : [
-                            
-                                {label :'año' ,value: '2006'},
-                                {label :'km' ,value: '10000'},
-                                {label :'asientos',value: '4 '},
-                                {label :'cc' ,value: '250'},
-                                {label :'transimisión' ,value: 'manual'},
-                            
-                        ]
-                    },
-                    
-                    
-                ],
+                relatedProducts : [],
                 imagenesAnuncio : [],
                 anuncioDetails : {},
                 sellerContact : [],
@@ -125,12 +58,18 @@
         async loadAPI() {
             const {ID} = this.props.match.params;
             const anunciosDetails =  await this.getAnuncioDetails(ID);
+
+            
+            const relatedAnuncios  = await this.getRelatedAnuncios(anunciosDetails.id_marca);
+			
+			
             // Get Images
             const imagenesAnuncio =  await this.getImagenesAnuncios(ID);
 			// Get Seller Info
 
             this.setState({
                 anuncioDetails : anunciosDetails,
+                relatedAnuncios : relatedAnuncios,
                 imagenesAnuncio : imagenesAnuncio,
                 isLoaded : true
             })
@@ -177,6 +116,29 @@
             const anuncioImagesData = await anuncioImagesPromise.data;
         
             return anuncioImagesData;
+        }
+
+
+        /** --------------------------------------
+        // Get Related Anuncios 
+        // With Promises
+        // @returns {An Promise Object}
+        // --------------------------------------*/
+        async getRelatedAnuncios(id_marca) {
+			console.log("TCL: Details -> getRelatedAnuncios -> id_marca", id_marca)
+            const settings = { 
+                headers : { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                params : {
+                    relatedMarca : id_marca || 0
+                }  
+            }
+            const relatedAnunciosPromise = await axios.get(Endpoints.getRelatedAnuncios, settings);
+            const relatedAnunciosData = await relatedAnunciosPromise.data;
+        
+            return relatedAnunciosData;
         }
 
         /** --------------------------------------
@@ -250,7 +212,7 @@
         // Render Breadcumbs
         // --------------------------------------
         renderBreadcumbs() {
-            return <Breadcumbs/>
+            return <Breadcumbs previousName = {'Regresar a la Búsqueda'}/>
         }
 
 
@@ -259,7 +221,8 @@
         // --------------------------------------
         renderSlider() {
             const {imagenesAnuncio} = this.state;
-            return <SmallSlider imagesData = {imagenesAnuncio}/>
+			console.log("TCL: Details -> renderSlider -> imagenesAnuncio", imagenesAnuncio)
+            return  imagenesAnuncio && <SmallSlider imagesData = {imagenesAnuncio}/>
         }
 
         // --------------------------------------
@@ -297,13 +260,13 @@
         // --------------------------------------
         // Render Related Products
         // --------------------------------------
-        renderRelatedProducts() {
-            const {relatedProducts} = this.state;
-            const itemsToShow = relatedProducts.length;
+        renderRelatedAnuncios() {
+            const {relatedAnuncios} = this.state;
+            const itemsToShow = relatedAnuncios.length;
             return (
                 <div className="row sm-carrouselRow">
                     <div className="col-lg-12">
-                        <Carrousel carrouselData = {relatedProducts} itemsToShow = {itemsToShow} />
+                        <Carrousel carrouselData = {relatedAnuncios} itemsToShow = {itemsToShow} />
                     </div>
                 </div>
             )
@@ -369,33 +332,8 @@
                                                 <StrippedTable data = {anuncioDetails} />
                                                 
                                             </div>
-                                            { /* Modal*/ }
-                                            <div className="modal fade lead-form-modal" id="car-details" tabindex="-1" role="dialog" >
-                                                <div className="modal-dialog" role="document">
-                                                    <div className="modal-content">
-                                                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
-                                                            <span aria-hidden="true">&times;</span>
-                                                        </button>
-                                                        <div className="modal-body clearfix">
-                                                            <div className="pull-letf max-width-300"></div>
-                                                            <div className="lead-form">
-                                                                <form>
-                                                                    <h3 className="m-t0">Personal Details</h3>
-                                                                    <div className="form-group">
-                                                                        <input value="" className="form-control" placeholder="Name"/>
-                                                                    </div>	
-                                                                    <div className="form-group">
-                                                                        <input value="" className="form-control" placeholder="Mobile Number"/>
-                                                                    </div>
-                                                                    <div className="clearfix">
-                                                                        <button type="button" className="btn-primary site-button btn-block">Submit </button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>	
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
+                                           
                                         </div>
                                         
                                         <div className="col-md-4">
@@ -416,7 +354,7 @@
                                                 
                                             </div>
                                         {/* Related Products */}
-                                        {/*this.renderRelatedProducts()*/}
+                                        {this.renderRelatedAnuncios()}
                                         </div>
                                     </div>
                             

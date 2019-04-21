@@ -31,7 +31,8 @@ class Carrousel extends Component {
                 infinite: true,
                 arrows : true,
                 speed: 500,
-                slidesToShow: this.props.itemsToShow - 1,
+                // slidesToShow: this.props.itemsToShow - 1,
+                slidesToShow: 3,
                 slidesToScroll: 1,
                 initialSlide: 0,
                 responsive: [
@@ -71,8 +72,8 @@ class Carrousel extends Component {
     createCarrouselItem(carrouselItem, index, itemsToShow) {
         
         return (
-            <div key = {index} className={`col-lg-12 col-md-12 col-sm-12 ${itemsToShow <= 3 && 'xpl-cardStyleCenter'}`} >
-                <ProductCard  {...carrouselItem}/>
+            <div key = {index} className={`col-lg-12 col-md-12 col-sm-12 ${itemsToShow <= 4 && 'xpl-cardStyleCenter'}`} >
+                <ProductCard  vehicle = {carrouselItem}/>
             </div>
         )
     }
@@ -88,8 +89,10 @@ class Carrousel extends Component {
             <Slider {...this.settings}>
             {
                 carrouselData.map((carrouselItem,index) => {
+					console.log("TCL: Carrousel -> renderCarrousel -> carrouselItem", carrouselItem)
                     return  (
                         this.createCarrouselItem(carrouselItem, index, itemsToShow)
+                        
                     )
                     
                 })
