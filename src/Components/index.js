@@ -73,7 +73,8 @@
     import AnuncioLabel from './Widgets/CustomLabel/AnuncioLabel' ;
     import Pagination from './Widgets/Pagination/Pagination';
     import PaginationItem from './Widgets/Pagination/PaginationItem';
-    
+    import ActiveFilters from './Widgets/ActiveFilters/ActiveFilters';
+    import FilterItem from './Widgets/ActiveFilters/FilterItem';
 
 // --------------------------------------
 // Export Components
@@ -132,6 +133,8 @@
         AnuncioLabel,
         Pagination,
         PaginationItem,
+        ActiveFilters,
+        FilterItem,
         // --------------------------------------
         // Form Steps
         // --------------------------------------

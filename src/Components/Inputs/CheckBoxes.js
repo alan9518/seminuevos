@@ -12,12 +12,6 @@
     } from 'react'
     import PropTypes from 'prop-types'
 
-// --------------------------------------
-// Styles 
-// --------------------------------------
-    // const styles = {
-    //     padding : 
-    // }
 
 // --------------------------------------
 // Create Component

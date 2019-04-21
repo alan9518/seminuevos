@@ -62,7 +62,7 @@
                         this.marcasData =  marcasArray;
                     const ubicacionArray = await this.loadUbicacion();
                         this.ubicacionData =  ubicacionArray;
-                    console.log('​FloatingSearch -> loadAPI -> this.marcasData', this.marcasData)
+                    
 
                     this.setState( {
                         isLoaded : true

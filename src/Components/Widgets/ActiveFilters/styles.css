@@ -1,0 +1,50 @@
+/* ==========================================================================
+** Active Filters Stkes
+** 19/04/2019
+** Alan Medina Silva
+** ========================================================================== */
+
+.sr-filtersList {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.sr-activeFilters {
+   
+    padding: 10px 15px;
+    border-radius: 50px;
+    margin: 10px; 
+    background: #f3f3f3;
+   
+    position: relative;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.sr-activeFilters i{
+    line-height: 1.2rem;
+    margin-left: 8px;
+    display: block;
+    width: 1.2rem;
+    height: 1.2rem;
+    /* color: #fff; */
+    /* background: #b3b3b3; */
+    padding: 0;
+    border-radius: 50%;
+    text-align: center;
+    cursor: pointer;
+}
+
+
+.sr-removeFilters {
+    margin-left: auto;
+    color: #e25f57;
+    padding: 10px;
+    cursor: pointer;
+}

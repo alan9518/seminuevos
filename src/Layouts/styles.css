@@ -470,3 +470,20 @@
     #appView .powrMark.text-center {
         display: none !important;
     }
+
+
+    .sr-filterItemsContainer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sr-filterItemsContainerItem {
+        margin-bottom: 15px;
+
+    }
+
+    .sr-FilterButtonContainer {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+    }

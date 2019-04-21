@@ -29,14 +29,22 @@
             super(props);
             this.state = {
                 isLoaded : false,
-                selectedMarca : {value : undefined, label : 'Selecciona la Marca'},
-                selectedModelo : {value : undefined, label : 'Selecciona el Modelo'},
-                selectedUbicacion : {value : undefined, label : 'Selecciona el Estado'},
+                selectedTipo : {value : null, label : 'Selecciona el Tipo'},
+                selectedMarca : {value : null, label : 'Selecciona la Marca'},
+                selectedModelo : {value : null, label : 'Selecciona el Modelo'},
+                selectedUbicacion : {value : null, label : 'Selecciona el Estado'},
                 modelos : [],
                 isModelosLoaded : false,
-                precioBase : '',
-                precioTope : '',
+                precioBase : null,
+                precioTope : null,
                 searchResults : {},
+                seachParams : [
+                    {searchMarca : false},
+                    {searchModelo : false},
+                    {searchLocation : false},
+                    {searchPrecio : false}
+
+                ],
                 redirectUser : false
             }
         }
@@ -93,7 +101,7 @@
                     }
                 }
                 
-                console.log("TCL: getAnunciosData -> settings", settings)
+                
                 const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
                     headers : { 
                         'Content-Type': 'application/json',
@@ -115,6 +123,16 @@
     /* ==========================================================================
     ** Handle State
     ** ========================================================================== */
+
+            // --------------------------------------
+            // Handle TIpo Select State
+            // --------------------------------------
+            handleSelecTipoChange = (selectedTipo) => {
+				console.log('​handleSelectModeloChange -> selectedTipo', selectedTipo)
+                this.setState({
+                    selectedTipo : selectedTipo
+                })
+            }
             
             // --------------------------------------
             // Handle Marcas Select State
@@ -124,7 +142,8 @@
                 this.loadModelos(selectedMarca)
                 .then((modelosAnswer)=> {
                     let modelos =  modelosAnswer.data;
-                    this.setState({
+                    // let seachParams =  
+                    modelos && this.setState({
                         selectedMarca:selectedMarca,
                         modelos : modelos,
                         isModelosLoaded : false
@@ -176,24 +195,60 @@
             handleFormSubmit = (event)  => {
                 event.preventDefault()
                 const {selectedMarca, selectedModelo, selectedUbicacion, } = this.state;
+				console.log("TCL: handleFormSubmit -> selectedUbicacion", selectedUbicacion)
+				console.log("TCL: handleFormSubmit -> selectedModelo", selectedModelo)
+                console.log("TCL: handleFormSubmit -> selectedMarca", selectedMarca)
                 
-                // Get Anuncios
-                this.getAnunciosData().then((data) =>{
-                    console.log('TCL: this.getAnunciosData -> data', data)
-                    const anunciosData =  data;
-                    // Set State to Redirect User
-                    this.setState({
-                        searchResults : anunciosData,
-                        redirectUser: true
-                    });
-                    
+
+                this.setState({
+                    // searchResults : anunciosData,
+                    redirectUser: true
                 });
                 
-
-                
-                
+                // Get Anuncios
+                // this.getAnunciosData().then((data) =>{
+                //     console.log('TCL: this.getAnunciosData -> data', data)
+                //     const anunciosData =  data;
+                //     // Set State to Redirect User
+                //     this.setState({
+                //         searchResults : anunciosData,
+                //         redirectUser: true
+                //     });
+                    
+                // });
             }
 
+
+            // ?--------------------------------------
+            // ? Choose query to Search
+            // ?--------------------------------------
+            setSearchParams() {
+                const {selectedTipo, selectedModelo, selectedMarca, selectedUbicacion, precioBase, precioTope } = this.state;
+                // let searchParams = {selectedTipo, selectedModelo, selectedMarca, selectedUbicacion, precioBase, precioTope } ;
+
+                if(selectedTipo.value === null && 
+                    selectedModelo.value === null && 
+                    selectedMarca.value === null && 
+                    selectedModelo.value === null && 
+                    selectedUbicacion.value === null && 
+                    precioBase === null &&
+                    precioTope ===  null) 
+                        return ''
+                    
+
+                //  If Not Null Values return string
+                let searchParams = `?tipo=${selectedTipo.value !== null ? selectedTipo.label : 'nan'}
+                                    &modelo=${selectedModelo.value !== null ? selectedModelo.label : 'nan'}
+                                    &marca=${selectedMarca.value !== null ? selectedMarca.label : 'nan'}
+                                    &ubicacion=${selectedUbicacion.value !== null ? selectedUbicacion.label : 'nan'}
+                                    &precioBase=${precioBase!== null ? precioBase : 'nan'}
+                                    &precioTope=${precioTope !== null ? precioTope : 'nan'}`
+                                    
+				console.log("TCL: setSearchParams -> seachParams", searchParams)
+
+                // return JSON.stringify(searchParams);
+                return encodeURI(searchParams.replace(/\s/g,''));
+            }
             
             // --------------------------------------
             // get Price Filters Value
@@ -242,14 +297,19 @@
         // Render Search Box
         // --------------------------------------
         renderSearchBox() {
-            const {modelos, selectedModelo, precioBase, precioTope, redirectUser, searchResults} = this.state
+            const {selectedTipo, modelos, selectedModelo, precioBase, precioTope, redirectUser, searchResults} = this.state
 
             if (redirectUser) {
-                return <Redirect to={{ pathname: '/Demo2/resultados', searchResults: {searchResults}}} />
+                const searchParams = this.setSearchParams()
+                if(searchParams === '')
+                    return <Redirect to={{ pathname: `/Demo2/resultados/` }} />
+                else
+                    return <Redirect to={{ pathname: `/Demo2/resultados/`,  search: searchParams }} />
             }
             
 
             const {tipoData, marcasData, ubicacionData} = this.props;
+			console.log("TCL: renderSearchBox -> tipoData", tipoData)
 
             return (
                 <Fragment>
@@ -269,14 +329,17 @@
                                             <div  id="budgetDiv" className = "new_form_div">
 
                                                 <div className = "input-group">
-                                                    <CustomSelect 
+                                                   
+                                                    <Select
+                                                        className="basic-single"
+                                                        classNamePrefix="select"
                                                         defaultValue = {tipoData[0]}
                                                         isClearable={false}
                                                         isSearchable={false}
+                                                        name = {'tipoSelect'}
+                                                        value={selectedTipo}
+                                                        onChange={this.handleSelecTipoChange}
                                                         options={tipoData}
-                                                        name = {'searchTypeSelect'}
-                                                        // onChange = {this.handleSelectMarcaChange}
-
                                                     />
                                                 </div>
 

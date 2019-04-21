@@ -11,7 +11,8 @@
     import {Endpoints} from '../../services/endpoints';
     import bgImage from '../../images/header/resultadosBG.jpg';
     import axios from 'axios';
-    import {SubHeader, SideBar, Breadcumbs, ResultsList, ResultsSorting, ResultsGrid, AppLoader,Pagination} from '../../Components/'
+    import queryString from 'query-string';
+    import {SubHeader, SideBar, Breadcumbs, ResultsList, ResultsSorting, ResultsGrid, AppLoader,Pagination, ActiveFilters} from '../../Components/'
     
 // --------------------------------------
 // Create Component Class
@@ -32,17 +33,37 @@
                     {label : 'Nombre: A a la Z' , value : 'tituloAsc'},
                     {label : 'Nombre: Z a la  A' , value : 'tituloDesc'},
                 ],
+                maxPrice : 0,
+                minPrice : 0,
+                activeFilters : [],
                 searchResults : [],
+                municipios : [],
                 selectedFilter :  {label : 'Fecha: mas recientes' , value : 'highDate'},
                 currentPage : 1,
                 resultsCount : 0,
                 isLoaded : false,
                 loadingData : false,
-                itemsPerPage : 6
+                itemsPerPage : 6,
+               
             }
+            // this.estados = [];
         }
 
         componentDidMount() {
+            const {location} = this.props;
+            const {search} = location;
+
+            const searchValues = queryString.parse(search);
+			console.log("TCL: ListResults -> componentDidMount -> searchValues", searchValues)
+
+            // const params = new URLSearchParams(search)
+
+            // params.get('tipo');
+			// console.log("TCL: ListResults -> componentDidMount -> params.get('tipo')", params.get('tipo'))
+
+			// console.log("TCL: ListResults -> componentDidMount -> params", params)
+            // console.log("TCL: ListResults -> componentDidMount -> search", search)
+            
             this.loadAPI();
         }
     
@@ -55,10 +76,12 @@
         // GET All Requests
         // --------------------------------------
         async loadAPI() {
+
+            
+
             const anunciosCount =  await this.getAnunciosCount();
             const anunciosData =  await this.getAnunciosData();
-            
-			console.log("TCL: ListResults -> loadAPI -> anunciosCount", anunciosCount)
+           
             this.setState({
                 searchResults : anunciosData,
                 anunciosCount: anunciosCount.count,
@@ -67,51 +90,104 @@
         }
 
 
-        /** --------------------------------------
-        // Get Anuncios Data
-        // With Promises
-        // @returns {An Promise Object}
-        // --------------------------------------*/
-        async getAnunciosData(page = 1, sortBy = 'highDate') {
-            const {currentPage, itemsPerPage} = this.state
-            const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
-                headers : { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                },
-                params : {
-                    page : page || currentPage,
-                    items : itemsPerPage,
-                    sortBy : sortBy
-                }
-            });
-            const anunciosData = await loadAnunciosPromise.data;
-        
-            return anunciosData;
-        }
+     
 
 
-        
-        /** --------------------------------------
-        // Get Anuncios Data
-        // With Promises
-        // @returns {An Promise Object}
-        // --------------------------------------*/
-        async getAnunciosCount() {
+        /* ==========================================================================
+        ** Data For Results
+        ** ========================================================================== */
 
-            const anunciosCountPromise = await axios.get(Endpoints.getAnunciosCount, { 
-                headers : { 
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                }
+
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnunciosData(page = 1, sortBy = 'highDate') {
+                const {currentPage, itemsPerPage} = this.state
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        page : page || currentPage,
+                        items : itemsPerPage,
+                        sortBy : sortBy
+                    }
+                });
+                const anunciosData = await loadAnunciosPromise.data;
+            
+                return anunciosData;
+            }
+
+
+            
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnunciosCount() {
+
+                const anunciosCountPromise = await axios.get(Endpoints.getAnunciosCount, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    }
+                    
+                });
+                const anunciosCount = await anunciosCountPromise.data;
+                // const ubicacionData = this.formatSelectValues(anunciosCount);
+            
+                return anunciosCount;
+            }
+
+
+            
+            /** --------------------------------------
+            // Filter By Ubication
+            // With Promises
+            // @param {estado, municipio}
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            filterByUbication = ( estado, ciudad) =>{
+			
+                const {activeFilters} = this.state;
+
+                estado.value !== null && activeFilters.push({filterName : 'estado', displayText : 'Estado',  value : `${estado.label} `});
+                ciudad.value !== null && activeFilters.push({filterName : 'ciudad', displayText : 'Ciudad',  value : `${ciudad.label}`});
+
+                this.setState({
+                    activeFilters : activeFilters
+                })
+
+			
+               
                 
-            });
-            const anunciosCount = await anunciosCountPromise.data;
-            // const ubicacionData = this.formatSelectValues(anunciosCount);
-        
-            return anunciosCount;
-        }
+            }
 
+
+            /** --------------------------------------
+            // Filter By Ubication
+            // With Promises
+            // @param {estado, municipio}
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            filterByMarca = ( marca) =>{
+                
+                console.log("TCL: ListResults -> filterByMarca -> marca", marca)
+				
+                const {activeFilters} = this.state;
+
+                
+                marca.value !== null && activeFilters.push({filterName : 'marca', displayText : 'Marca',  value : `${marca.label}`});
+
+                this.setState({
+                    activeFilters : activeFilters
+                })
+
+            }
 
 
 
@@ -141,7 +217,7 @@
             const {selectedFilter} = this.state;
             let newPage = this.state.currentPage;
 			
-            console.log("TCL: ListResults -> onPageitemCick -> value", value)
+            // console.log("TCL: ListResults -> onPageitemCick -> value", value)
             
             // const newPage = value
             switch(value) {
@@ -157,7 +233,7 @@
 
             this.setState({loadingData : true})
 
-            console.log("TCL: ListResults -> onPageitemCick -> newPage", newPage)
+            
 
             // Update Data
             this.getAnunciosData(newPage,selectedFilter.value).then((data)=> {
@@ -191,8 +267,19 @@
 
                     })
 
-            }
+        }
 
+
+        // ?--------------------------------------
+        // ? Remove Filter Options
+        // ?--------------------------------------
+        cleanFilterOptions = ()=> {
+            this.setState({
+                activeFilters : []
+
+            })
+        }
+          
 
     /* ==========================================================================
      *  Render Methods
@@ -218,10 +305,20 @@
 
 
         // --------------------------------------
+        // Render Current Filters
+        // --------------------------------------
+        renderCurrenFilters(filters) {
+            console.log("TCL: ListResults -> renderCurrenFilters -> filters", filters)
+            
+            return (<ActiveFilters filters = {filters} cleanFilterOptions = {this.cleanFilterOptions}/>);
+
+        }
+
+        // --------------------------------------
         // Render SideBar
         // --------------------------------------
         renderSideBar() {
-            return <SideBar sideBarTitle = {"Filtros de Búsqueda"}/>
+            return <SideBar sideBarTitle = {"Filtros de Búsqueda"} filterByUbication = {this.filterByUbication} filterByMarca = {this.filterByMarca}/>
         }
 
         // --------------------------------------
@@ -251,7 +348,7 @@
         // --------------------------------------
         renderResultsList() {
             const {searchResults} = this.state;
-            console.log('TCL: ListResults -> renderResultsList -> searchResults', searchResults)
+            // console.log('TCL: ListResults -> renderResultsList -> searchResults', searchResults)
             // console.log('TCL: ListResults -> renderResultsList -> searchResults', ...searchResults)
             return <ResultsList searchResults = {searchResults} />
         }
@@ -263,7 +360,7 @@
         renderResultsGrid() {
             
             const {searchResults} = this.state;
-			console.log("TCL: ListResults -> renderResultsGrid -> searchResults", searchResults)
+			// console.log("TCL: ListResults -> renderResultsGrid -> searchResults", searchResults)
             return <ResultsGrid searchResults = {searchResults || [] }/>
         }
 
@@ -271,7 +368,8 @@
         // Render List View
         // --------------------------------------
         renderListView() {
-            const {listLayout} = this.state;
+            const {listLayout,activeFilters} = this.state;
+			console.log("TCL: ListResults -> renderListView -> activeFilters", activeFilters)
             return (
                 <Fragment> 
                     <div className = "page-content">
@@ -292,7 +390,7 @@
                                     <div className = "col-sm-8 col-md-8 col-lg-9">
                                         <div className = "row">
                                             <div className = "p-lr15 clearfix ">
-                                                
+                                                {activeFilters && this.renderCurrenFilters(activeFilters)}
                                                 {this.renderResultsSorting()}
                                             </div>
                                             

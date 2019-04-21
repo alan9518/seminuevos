@@ -25,8 +25,14 @@
         constructor(props) {
             super(props);
             this.state = {
-                value: { min: 500, max: 5000 },
+                value: { min: 25000, max: 1000000 },
             };
+        }
+
+
+        onRangeChange = (value)=> {
+			console.log("TCL: PriceSlider -> onRangeChange -> value", value)
+            this.setState({ value })
         }
 
         // --------------------------------------
@@ -42,10 +48,10 @@
                         	<input type="text" id="amount" className="amount" readOnly value = {`$ ${value.min} - $ ${value.max}`} />
                             <InputRange
                                 formatLabel={value => `$ ${value}`}
-                                maxValue={9999}
-                                minValue={500}
+                                maxValue={1000000}
+                                minValue={25000}
                                 value={value}
-                                onChange={value => this.setState({ value })} 
+                                onChange={this.onRangeChange} 
                             />
                         </div>
                     </div>
@@ -63,11 +69,19 @@
 // --------------------------------------
 // Define PropTypes
 // --------------------------------------
-    // PriceSlider.propTypes = {
-    // prop: PropTypes
-    // };
+    PriceSlider.propTypes = {
+    
+        onChange: PropTypes.func,
+        onClick: PropTypes.func,
+        onKeyPress: PropTypes.func,
+        onSliderDragEnd: PropTypes.func,
+        onSliderDragMove: PropTypes.func,
+        onSliderDragStart: PropTypes.func,
+        onValuesUpdated: PropTypes.func
+    };
 
 // --------------------------------------
 // Export Component
 // --------------------------------------
     export default PriceSlider;
+

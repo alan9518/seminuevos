@@ -48,7 +48,8 @@ import PropTypes from 'prop-types'
 // --------------------------------------
 RangeSelect.propTypes = {
     startSelect: PropTypes.element,
-    endSelect: PropTypes.element
+    endSelect: PropTypes.element,
+   
 }
 
 

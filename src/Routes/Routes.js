@@ -92,8 +92,9 @@
         },
         {
             
+            // path : `${path}/resultados/`,
             path : `${path}/resultados/`,
-            exact: false,
+            exact: true,
             key : 'resultados-route',
             component : ListResultsView,
         },

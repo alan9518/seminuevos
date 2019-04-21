@@ -64,7 +64,7 @@
 
                     {
                         // currentPage > 1 && <li class="previous"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                        currentPage > 1 &&   <PaginationItem  
+                        currentPage >= 1 &&   <PaginationItem  
                                                 key = {`pagItem-prev`} 
                                                 onItemClick = {props.onItemClick} 
                                                 pageCounter = {'prev'} 
