@@ -241,7 +241,7 @@
                                     &modelo=${selectedModelo.value !== null ? selectedModelo.label : 'nan'}
                                     &marca=${selectedMarca.value !== null ? selectedMarca.label : 'nan'}
                                     &ubicacion=${selectedUbicacion.value !== null ? selectedUbicacion.label : 'nan'}
-                                    &precioBase=${precioBase!== null ? precioBase : 'nan'}
+                                    &precioBase=${precioBase !== null ? precioBase : 'nan'}
                                     &precioTope=${precioTope !== null ? precioTope : 'nan'}`
                                     
 				console.log("TCL: setSearchParams -> seachParams", searchParams)

@@ -27,8 +27,8 @@
                 <div className="footer-bottom">
                     <div className="container">
                         <div className="row">
-                            <div className="col-md-6 col-sm-6 text-left"> © Copyright 2019  Sr. Seminuevos sitio desarrollado por 
-                                <span className="text-primary"><a href="https://www.sarcuzastudio.com/" target="_blank" rel="noopener noreferrer">&nbsp;Sarcuza studio</a></span> 
+                            <div className="col-md-6 col-sm-6 text-left"> © Copyright 2019  Sr. Seminuevos sitio desarrollado por &nbsp;
+                                <span className="text-primary"><a href="https://www.sarcuzastudio.com/" target="_blank" rel="noopener noreferrer">Sarcuza studio</a></span> 
                             </div>
                             <div className="col-md-6 col-sm-6 text-right footerLinks"> 
                                 {/* <a href="aviso-de-privacidad.html"> Aviso de privacidad</a> |  */}

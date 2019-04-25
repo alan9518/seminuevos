@@ -49,12 +49,20 @@
             // this.estados = [];
         }
 
+
+        // ?--------------------------------------
+        // ? Look For initial Query values
+        // ?--------------------------------------
         componentDidMount() {
             const {location} = this.props;
             const {search} = location;
+			console.log("TCL: ListResults -> componentDidMount -> search", search)
 
             const searchValues = queryString.parse(search);
 			console.log("TCL: ListResults -> componentDidMount -> searchValues", searchValues)
+            // const valuesArray = search.split('&')
+			// console.log("TCL: ListResults -> componentDidMount -> valuesArray", valuesArray)
+			// console.log("TCL: ListResults -> componentDidMount -> searchValues", searchValues)
 
             // const currentFilters =  searchValues.filter(filter=> filter !== 'nan')
 			// console.log("TCL: ListResults -> componentDidMount -> currentFilters", currentFilters)
@@ -72,12 +80,28 @@
         // --------------------------------------
         async loadAPI(searchValues) {
 
-            
+            let anunciosCount = 0;
+            let anunciosData = [];
 
-            const anunciosCount =  await this.getAnunciosCount();
-            // const anunciosData =  await this.getAnunciosData();
+            console.log("TCL: ListResults -> loadAPI -> searchValues.length", searchValues)
 
-            const anunciosData =  await this.getAnunciosDataWithSearchParams(searchValues);
+            if(!this.isEmpty(searchValues)) {
+				
+                anunciosData =  await this.getAnunciosDataWithSearchParams(searchValues);
+                anunciosCount =  await this.getAnunciosCountWithSearchParams(searchValues);
+                
+            }
+            else
+            {
+                anunciosData =  await this.getAnunciosData();
+                anunciosCount =  await this.getAnunciosCount();
+                
+            }
+
+
+          
+            console.log("TCL: ListResults -> loadAPI -> anunciosData", anunciosData)
+         
            
             this.setState({
                 searchResults : anunciosData,
@@ -110,13 +134,19 @@
                     params : {
                         page : page || currentPage,
                         items : itemsPerPage,
-                        sortBy : sortBy
+                        sortBy : sortBy,
+                        
                     }
                 });
                 const anunciosData = await loadAnunciosPromise.data;
+				console.log("TCL: ListResults -> getAnunciosData -> anunciosData", anunciosData)
             
                 return anunciosData;
             }
+
+
+           
+
 
 
             /** --------------------------------------
@@ -125,17 +155,23 @@
             // @returns {An Promise Object}
             // --------------------------------------*/
             async getAnunciosDataWithSearchParams(searchParams, page = 1, sortBy = 'highDate') {
+				console.log("TCL: ListResults -> getAnunciosDataWithSearchParams -> searchParams", searchParams)
                 const {currentPage, itemsPerPage} = this.state
-                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnuncios, { 
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnunciosWithParams, { 
                     headers : { 
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
                     params : {
+                        tipo : searchParams.tipo,
+                        marca : searchParams.marca,
+                        modelo : searchParams.modelo,
+                        ubicacion : searchParams.ubicacion,
+                        precioBase : searchParams.precioBase ,
+                        precioTope : searchParams.precioTope,
                         page : page || currentPage,
                         items : itemsPerPage,
                         sortBy : sortBy,
-                        location : 'jalisco'
                     }
                 });
                 const anunciosData = await loadAnunciosPromise.data;
@@ -165,6 +201,38 @@
             
                 return anunciosCount;
             }
+
+
+               
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnunciosCountWithSearchParams(searchParams) {
+
+                const anunciosCountPromise = await axios.get(Endpoints.getAnunciosCountWithSearchParams, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        tipo : searchParams.tipo,
+                        marca : searchParams.marca,
+                        modelo : searchParams.modelo,
+                        ubicacion : searchParams.ubicacion,
+                        precioBase : searchParams.precioBase ,
+                        precioTope : searchParams.precioTope,
+                    }
+                    
+                });
+                const anunciosCount = await anunciosCountPromise.data;
+                // const ubicacionData = this.formatSelectValues(anunciosCount);
+            
+                return anunciosCount;
+            }
+
+
 
 
             
@@ -301,6 +369,20 @@
                 activeFilters : []
 
             })
+        }
+
+        // ?--------------------------------------
+        // ? Check if Object is Empty
+        // ?--------------------------------------
+        isEmpty(obj) {
+            // for(var key in obj) {
+            //     if(obj.hasOwnProperty(key))
+            //         return false;
+            // }
+            // return true;
+
+            // Obreturn Object.keys(obj).length === 0;ect.entries(obj).length === 0 && obj.constructor === Object
+            return Object.keys(obj).length === 0;
         }
           
 

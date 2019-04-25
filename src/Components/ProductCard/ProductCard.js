@@ -16,7 +16,7 @@
  // Create Component
  // --------------------------------------
     const ProductCard = (props) => {
-	console.log("TCL: ProductCard -> props", props)
+	
 
     
         const {titulo,id_anuncio,imagen_destacada, precio,year, transmision, kilometraje} = props.vehicle;

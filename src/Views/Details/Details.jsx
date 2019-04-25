@@ -25,12 +25,14 @@
         constructor(props) {
             super(props);
             this.state = {
-                details : {},
+                // details : {},
                 relatedProducts : [],
                 imagenesAnuncio : [],
                 anuncioDetails : {},
                 sellerContact : [],
                 showContactForm : false,
+                sendingMail : false,
+                emailSent : false,
                 name : '',
                 mail : '',
                 telephone : '',
@@ -166,6 +168,44 @@
 
 
 
+        // ?--------------------------------------
+        // ? Contact Vendedor
+        // ?--------------------------------------
+        contactVendedor = ()=> {
+            const { name , mail , telephone , message } = this.state;
+            const anuncio = this.state.anuncioDetails.titulo;
+
+            this.setState({sendingMail : true});
+                
+                // Create Form Data
+                    const data = new FormData();
+                       
+                    data.set('nombreVendedor', 'alan');
+                    data.set('mailVendedor', 'alanmedina437@gmail.com');
+                    data.set('nombreCliente', name);
+                    data.set('emailCliente', mail);
+                    data.set('telCliente',telephone);
+                    data.set('message', message);
+                    data.set('anuncio', anuncio);
+
+               // Axios Request
+                    axios({
+                        method: 'post',
+                        url: Endpoints.contactVendedor,
+                        data: data,
+                        config: { headers : { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        }}
+                    }).then((emailResponse)=> {
+                        const sendEmailContactData =  emailResponse;
+                        console.log("TCL: Details -> contactVendedor -> sendEmailContactData", sendEmailContactData)
+                        this.setState({sendingMail : false, emailSent : true, showContactForm : false})
+                    })
+
+        }
+
+
     
     /* ==========================================================================
      *  Handle State
@@ -239,7 +279,7 @@
         // --------------------------------------
         renderContactForm () {
             const {precio, titulo} = this.state.anuncioDetails;
-            const {name, mail, telephone, message} = this.state;
+            const {name, mail, telephone, message, sendingMail} = this.state;
 
             return (
                 <ContactForm 
@@ -249,6 +289,8 @@
                     telephone = {telephone} 
                     message ={message} 
                     precio = {precio}
+                    sendingMail = {sendingMail}
+                    onSubmit = {this.contactVendedor}
                     handleInputChange =  {this.handleInputChange}
                     cancel = {this.toggleContactInfo}
                 />

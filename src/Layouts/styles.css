@@ -443,11 +443,19 @@
         text-decoration: none;
         outline: 0;
     }
-    .footerLinks a:focus, .footerLinks a:hover {
-        /* color: #23527c; */
+    /* .footerLinks a:focus, .footerLinks a:hover {
+   
         color: #333;
         text-decoration: none;
+    } */
+
+    .footerLinks a:focus, .footerLinks a:hover {
+        /* color: #23527c; */
+        color: #fff;
+        text-decoration: none;
     }
+
+
     .footerLinks a:active, .footerLinks a:hover {
         outline: 0;
     }

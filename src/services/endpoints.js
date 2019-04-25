@@ -16,6 +16,7 @@
 
     // const path = 'https://srseminuevos.com/server'
     const path = 'http://localhost:8080/SR_seminuevos/backendFinal/WS'
+    const staticPath = 'http://srseminuevos.com/server';
 
 // --------------------------------------
 // Create Endpoints Object
@@ -50,15 +51,31 @@
             getAllEstados : `${path}/Estado/getEstados.php`,
 
         // --------------------------------------
-        // Get All Categories
+        // Get Count for Pagination all Anuncios
         // --------------------------------------
             getAnunciosCount : `${path}/Anuncios/getAnunciosCount.php`,
+
+
+
+        // --------------------------------------
+        // Get Count for Pagination with Params
+        // --------------------------------------
+            getAnunciosCountWithSearchParams :  `${path}/Anuncios/getAnunciosCountAllParams.php`,
         
        /** --------------------------------------
        // GET All Anuncios
        // @param {page}
        // -------------------------------------- */
             getAllAnuncios : `${path}/Anuncios/getAllAnuncios.php`,
+
+
+        /** --------------------------------------
+         * GET All Anuncios With QUery Params
+        // @param {}
+        // @returns {}
+        // -------------------------------------- */
+            getAllAnunciosWithParams : `${path}/Anuncios/getAllAnunciosWithParams.php`, 
+        
                 
         
         /** --------------------------------------
@@ -141,7 +158,23 @@
         // Save Vehiculo
         // --------------------------------------
             // addAnuncio : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Anuncios/AddAnuncio.php'
-            addAnuncio : `${path}/Anuncios/AddAnuncio.php`
+            addAnuncio : `${path}/Anuncios/AddAnuncio.php`,
+
+
+
+        /* ==========================================================================
+        ** Send Emails
+        ** ========================================================================== */
+        
+            // --------------------------------------
+            // Send Anuncio Created Email
+            // --------------------------------------
+                anuncioCreatedConfEmail : `${staticPath}/Email/AnuncioConfirmation.php`,
+            
+            // --------------------------------------
+            // Send Anuncio Created Email
+            // --------------------------------------
+                contactVendedor : `${staticPath}/Email/ContactoVendedor.php`,
             
 
     }
