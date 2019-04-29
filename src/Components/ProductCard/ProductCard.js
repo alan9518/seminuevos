@@ -17,9 +17,23 @@
  // --------------------------------------
     const ProductCard = (props) => {
 	
-
+        // <img src= {imagen_destacada} alt = {titulo} style = {{maxHeight : 240}}
     
         const {titulo,id_anuncio,imagen_destacada, precio,year, transmision, kilometraje} = props.vehicle;
+
+
+        const setImagenDestacada = (imagen_destacada) => {
+            if(imagen_destacada.indexOf('http') >=0 ) 
+                return imagen_destacada
+            else{
+                let imagenNameArray =  imagen_destacada.split('../');
+               
+                let imagenRelativeRouteName = imagenNameArray[2];
+                let imageRoute = `http://localhost:8080/SR_seminuevos/backendFinal/${imagenRelativeRouteName}`;
+            
+                return imageRoute
+            }
+        }
         
         // --------------------------------------
         // Render Component
@@ -29,7 +43,8 @@
                 <div className="dlab-feed-list">
                     <div className="dlab-media"> 
                         <ProjectLink route  = {`/anuncio/${id_anuncio}`}>
-                            <img src= {imagen_destacada} alt = {titulo} style = {{maxHeight : 240}}/> 
+                        
+                            <img src = {setImagenDestacada(imagen_destacada)}  alt = {titulo} /> 
                         </ProjectLink>
                     	
                     </div>

@@ -22,7 +22,7 @@
         // --------------------------------------
         // Extract Vehicle
         // --------------------------------------
-            const {vehicle, isFeatured} =  props;
+            const {vehicle, isFeatured, editVehicle} =  props;
 			
             const {id_anuncio, id, titulo, precio, imagen_destacada, shortDescription, year , kilometraje, transmision, equipamento } = vehicle;
 			
@@ -50,6 +50,14 @@
                 }
             }
 
+
+            const setShortDesc = (description) => {
+                if(description.length > 80) 
+                    return `${description.substr(0 , 80 )}...`
+                else
+                    return description
+            }
+
             
         // --------------------------------------
         // Render Component
@@ -73,24 +81,28 @@
                         </div>
                         <div className = "dlab-post-text">
                             <p>
-                                {shortDescription}
+                                {setShortDesc(shortDescription)}
                             </p>
                         </div>
                         <div className = "dlab-post-readmore"> 
                             <h2 className = "m-a0 pull-left m-r15 open-sans">$ {precio} </h2>
                             <ProjectLink route  = {`/anuncio/${id_anuncio}`}>
                                 <button  className = "site-button" >Detalles </button> 
-                            </ProjectLink>
+                            </ProjectLink> 
+                           
                             
                         </div>
-                        <div className = "dlab-post-tags">
-                            <div className = "post-tags"> 
-                                <span >{kilometraje }Kms</span> 
-                                <span >{year}</span> 
-                                {renderEquipamento(equipamento)}
-                                <span >{transmision}</span> 
-                            </div>
-                        </div>
+                        
+                            
+                                <div className = "dlab-post-tags">
+                                    <div className = "post-tags"> 
+                                        <span >{kilometraje }Kms</span> 
+                                        <span >{year}</span> 
+                                        {renderEquipamento(equipamento)}
+                                        <span >{transmision}</span> 
+                                    </div>
+                                </div>
+                        
                     </div>
                 </div>
             </Fragment> 

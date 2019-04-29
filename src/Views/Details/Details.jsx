@@ -47,6 +47,13 @@
         // --------------------------------------
         componentDidMount() {
             this.loadAPI();
+
+            console.log("TCL: Details -> componentDidMount -> this.props.history", this.props.history)
+            // const back =  this.props.history.go(-1);
+        
+            // console.log("TCL: Details -> componentDidMount -> back", back)
+
+            // this.props.history.goBack();
         }
 
 
@@ -252,7 +259,12 @@
         // Render Breadcumbs
         // --------------------------------------
         renderBreadcumbs() {
-            return <Breadcumbs previousName = {'Regresar a la Búsqueda'}/>
+
+            const currentPath = this.props.history;
+            const lastPath = this.props.history.action;
+			console.log("TCL: Details -> renderBreadcumbs -> lastPath", lastPath)
+			console.log("TCL: Details -> renderBreadcumbs -> currentPath", currentPath)
+            return <Breadcumbs previousName = {'Regresar a la Búsqueda'} previousPath = {this.props.location}/>
         }
 
 
@@ -304,6 +316,7 @@
         // --------------------------------------
         renderRelatedAnuncios() {
             const {relatedAnuncios} = this.state;
+			console.log("TCL: Details -> renderRelatedAnuncios -> relatedAnuncios", relatedAnuncios)
             const itemsToShow = relatedAnuncios.length;
             return (
                 <div className="row sm-carrouselRow">

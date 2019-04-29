@@ -16,7 +16,9 @@
 // Create Component
 // --------------------------------------
     const Breadcumbs = (props) => {
-        const {previousName} = props;
+        const {previousName, previousPath} = props;
+        console.log("TCL: Breadcumbs -> previousPath", previousPath)
+       
         // --------------------------------------
         // Render Component
         // --------------------------------------
@@ -26,7 +28,7 @@
                     <div className = "container">
                         <ul className = "list-inline">
                             <li><ProjectLink route={''}>Inicio</ProjectLink></li>
-                            {previousName && <li><ProjectLink route={''}>{previousName}</ProjectLink></li>}
+                            {previousName && <li><ProjectLink route={'previousPath'}>{previousName}</ProjectLink></li>}
                             {/* <li>Resultados</li> */}
                         </ul>
                     </div>

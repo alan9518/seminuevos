@@ -56,6 +56,13 @@
             getAnunciosCount : `${path}/Anuncios/getAnunciosCount.php`,
 
 
+         // --------------------------------------
+        // Get Count for Pagination all Anuncios
+        // --------------------------------------
+            getUserAnunciosCount : `${path}/Anuncios/getUserAnunciosCount.php`,
+
+
+
 
         // --------------------------------------
         // Get Count for Pagination with Params
@@ -77,13 +84,22 @@
             getAllAnunciosWithParams : `${path}/Anuncios/getAllAnunciosWithParams.php`, 
         
                 
+        /** --------------------------------------
+        // Get Anuncio Details
+        // @param {searchCat <String>}
+        // @param {idToSearch <int>}
+        // @param {startPage <int>}
+        // @param {endPage <int>}
+        // --------------------------------------*/
+            getAnunciosByUser : `${path}/Anuncios/getAnunciosByUser.php`,
+            
         
         /** --------------------------------------
         // Get Anuncio Details
         // @param {id_anuncio <String>}
         // --------------------------------------*/
             getAnuncioDetails : `${path}/Anuncios/getAnuncioDetails.php`,
-            // getAnuncioDetails : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Anuncios/getAnuncioDetails.php',
+            
 
 
          /** --------------------------------------
@@ -104,6 +120,13 @@
         // @param {id_anuncio }
         // --------------------------------------*/
             getUsuarioDetailsContact : `${path}/Usuarios/getUsuarioDetailsContact.php`,
+
+        
+        /** --------------------------------------
+        // Get User Detils By Mail
+        // @param {correo_usuario }
+        // --------------------------------------*/        
+            getUserDetails : `${path}/Usuarios/getUserDetails.php`,
         
         /** --------------------------------------
         // Get Agency Contact Info
@@ -150,17 +173,29 @@
         // --------------------------------------
         // Save Vehiculo
         // --------------------------------------
-            // addVehiculo : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Vehiculos/addVehiculo.php',
+            
             addVehiculo : `${path}/Vehiculos/addVehiculo.php`,
 
 
         // --------------------------------------
         // Save Vehiculo
         // --------------------------------------
-            // addAnuncio : 'http://localhost:8080/SR_seminuevos/backendFinal/WS/Anuncios/AddAnuncio.php'
+            
             addAnuncio : `${path}/Anuncios/AddAnuncio.php`,
 
 
+        // --------------------------------------
+        // Upload Image
+        // --------------------------------------
+            
+            uploadImage :`${path}/upload/upload.php`,
+
+        /** --------------------------------------
+        // Save Anuncio Images
+        // @param {id_anuncio <int>}
+        // @param {ruta_imagen <String>}
+        // --------------------------------------*/
+            saveAnuncioImage : `${path}/Anuncios/saveImagesAnuncio.php`,
 
         /* ==========================================================================
         ** Send Emails

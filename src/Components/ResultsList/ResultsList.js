@@ -8,7 +8,7 @@
 // Import Dependences
 // --------------------------------------
     import React, { Component, Fragment }  from 'react'
-    import {ResultItem} from '..'
+    import {ResultItem, ResultItemUser} from '../index'
     import PropTypes from 'prop-types'
     
 
@@ -23,13 +23,14 @@
         // Render ResultsList
         // --------------------------------------
 
-            const {searchResults} = props;
+            const {searchResults, editResults} = props;
 			console.log('TCL: ResultsList -> searchResults', searchResults)
             return (
                 <Fragment>
                     {
                         searchResults && searchResults.map((vehicle, index)=> {
-                            return <ResultItem key = {index} vehicle = {vehicle}/>
+                            return editResults === false  ? <ResultItem key = {index} vehicle = {vehicle} editVehicle = {editResults}/> : <ResultItemUser key = {index} vehicle = {vehicle} editVehicle = {editResults}/>
+                                
                         })
                     }
                 </Fragment>

@@ -25,8 +25,22 @@ class SmallSlider extends Component {
     // --------------------------------------
     // Constructor
     // --------------------------------------
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
+    // }
+
+
+    setImagenDestacada  (imagen_destacada)  {
+        if(imagen_destacada.indexOf('http') >=0 ) 
+            return imagen_destacada
+        else{
+            let imagenNameArray =  imagen_destacada.split('../');
+           
+            let imagenRelativeRouteName = imagenNameArray[2];
+            let imageRoute = `http://localhost:8080/SR_seminuevos/backendFinal/${imagenRelativeRouteName}`;
+        
+            return imageRoute
+        }
     }
 
     
@@ -36,22 +50,35 @@ class SmallSlider extends Component {
     renderSlider() {
         const baseUrl = 'http://carzone.dexignlab.com/xhtml/images/blog/grid'
         const {imagesData} = this.props;
-		console.log("TCL: SmallSlider -> renderSlider -> imagesData", imagesData)
+        // console.log("TCL: SmallSlider -> renderSlider -> imagesData", imagesData);
+        const context = this;
         const settings = {
             customPaging: function(i) {
+				console.log("TCL: SmallSlider -> renderSlider -> i", i)
                 return (
-                    <a>
-                        <img src={`${baseUrl}/pic${i + 1}.jpg`} />
-                    </a>
+                    // <a>
+                    //     <img src={`${baseUrl}/pic${i + 1}.jpg`} />
+                    // </a>
+
+                 
+                                    <a>
+                                        <img src={context.setImagenDestacada(imagesData[i].ruta_imagen)} />
+                                    </a>
+                            
+                    
                 );
-                    // imagesData.map((image)=> {
-					// 	console.log('TCL: SmallSlider -> renderSlider -> image', image)
-                    //     return (
-                    //         <div>
-                    //             <img src={image.ruta_imagen} />
-                    //         </div>
-                    //     )
-                    // })
+
+                // return (
+                //       imagesData.map((image)=> {
+				// 		console.log('TCL: SmallSlider -> renderSlider -> image', image)
+                //         return (
+                //             <a>
+                //                 <img src={context.setImagenDestacada(image.ruta_imagen)} alt = {image.ruta_imagen}/>
+                //             </a>
+                //         )
+                //     })
+                // );
+                  
                 // );
             },
             dots: true,
@@ -72,7 +99,7 @@ class SmallSlider extends Component {
 						
                         return (
                             <div>
-                                <img src={image.ruta_imagen} />
+                                <img src={this.setImagenDestacada(image.ruta_imagen)} alt = {image.ruta_imagen}/>
                             </div>
                         )
                     })

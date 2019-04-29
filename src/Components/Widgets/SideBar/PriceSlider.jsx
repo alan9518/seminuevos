@@ -25,7 +25,7 @@
         constructor(props) {
             super(props);
             this.state = {
-                value: { min: 25000, max: 1000000 },
+                value: { min: 25000, max: 100000 },
             };
         }
 
@@ -48,7 +48,7 @@
                         	<input type="text" id="amount" className="amount" readOnly value = {`$ ${value.min} - $ ${value.max}`} />
                             <InputRange
                                 formatLabel={value => `$ ${value}`}
-                                maxValue={1000000}
+                                maxValue={100000}
                                 minValue={25000}
                                 value={value}
                                 onChange={this.onRangeChange} 

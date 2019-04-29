@@ -36,6 +36,7 @@
     import Breadcumbs from './Breadcumbs/Breadcumbs';
     import ResultsList from './ResultsList/ResultsList';
     import ResultItem from './ResultsList/ResultItem';
+    import ResultItemUser from './ResultsList/ResultItemUser';
     import CustomAccordion from './Accordion/CustomAccordion';
     import CustomAccordionItem from './Accordion/CustomAccordionItem';
     import CheckBoxes from './Inputs/CheckBoxes';
@@ -106,6 +107,7 @@
         ProjectLink,
         ResultsList,
         ResultItem,
+        ResultItemUser,
         Breadcumbs,
         CustomAccordion,
         CustomAccordionItem,

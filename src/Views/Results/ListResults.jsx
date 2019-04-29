@@ -30,8 +30,8 @@
                     {label : 'Fecha: mas recientes' , value : 'highDate'},
                     {label : 'Precio: mas bajo al mas alto' , value : 'lowPrice'},
                     {label : 'Precio: mas alto al mas bajo' , value : 'HighPrice'},
-                    {label : 'Nombre: A a la Z' , value : 'tituloAsc'},
-                    {label : 'Nombre: Z a la  A' , value : 'tituloDesc'},
+                    // {label : 'Nombre: A a la Z' , value : 'tituloAsc'},
+                    // {label : 'Nombre: Z a la  A' , value : 'tituloDesc'},
                 ],
                 maxPrice : 0,
                 minPrice : 0,
@@ -46,8 +46,9 @@
                 itemsPerPage : 6,
                
             }
-            // this.estados = [];
-        }
+            this.searchValues = {}
+            
+            }
 
 
         // ?--------------------------------------
@@ -56,16 +57,12 @@
         componentDidMount() {
             const {location} = this.props;
             const {search} = location;
-			console.log("TCL: ListResults -> componentDidMount -> search", search)
+			
 
             const searchValues = queryString.parse(search);
-			console.log("TCL: ListResults -> componentDidMount -> searchValues", searchValues)
-            // const valuesArray = search.split('&')
-			// console.log("TCL: ListResults -> componentDidMount -> valuesArray", valuesArray)
-			// console.log("TCL: ListResults -> componentDidMount -> searchValues", searchValues)
+            this.searchValues =  searchValues;
 
-            // const currentFilters =  searchValues.filter(filter=> filter !== 'nan')
-			// console.log("TCL: ListResults -> componentDidMount -> currentFilters", currentFilters)
+            
             
             this.loadAPI(searchValues);
         }
@@ -323,29 +320,71 @@
             
 
             this.setState({loadingData : true})
-
+            
             
 
             // Update Data
-            this.getAnunciosData(newPage,selectedFilter.value).then((data)=> {
+            // getAnunciosDataWithSearchParams
+            // this.getAnunciosData(newPage,selectedFilter.value)
+            if(!this.isEmpty(this.searchValues)) {
                 
-                this.setState({
-                    currentPage : parseInt(newPage),
-                    searchResults : data,
-                    loadingData : false,
-                    itemsPerPage : 6
+                this.getAnunciosDataWithSearchParams(this.searchValues, newPage ,selectedFilter.value) 
+                    .then((data)=> {
+                
+                
+                    this.setState({
+                        currentPage : parseInt(newPage),
+                        searchResults : data,
+                        loadingData : false,
+                        itemsPerPage : 6
+                    })
                 })
-            })
+             }
+             
+                 
+            else {
+                this.getAnunciosData(newPage,selectedFilter.value)
+                    .then((data)=> {
+                    
+                    
+                    this.setState({
+                        currentPage : parseInt(newPage),
+                        searchResults : data,
+                        loadingData : false,
+                        itemsPerPage : 6
+                    })
+                })
+            }
+               
         }
 
         // --------------------------------------
         // Handle Filter Select Change
         // Load Date Based on the Filter
         // --------------------------------------
-        handleFilterSelectChange = (selectedFilter) => {
+        handleSortingSelectChange = (selectedFilter) => {
         
             const {value} = selectedFilter;
+            
+            
+			
+            
+            if(!this.isEmpty(this.searchValues)) {
+                this.getAnunciosDataWithSearchParams(this.searchValues, 1 ,value)
+                .then((data) => {
+						
+                    this.setState({
+                        currentPage : 1,
+                        selectedFilter: selectedFilter,
+                        searchResults: data,
+                        
+                    })
 
+                })
+            }
+               
+            else   {
+        
                 this.getAnunciosData(1, value)
                     .then((data) => {
 						
@@ -357,6 +396,8 @@
                         })
 
                     })
+            } 
+               
 
         }
 
@@ -375,13 +416,6 @@
         // ? Check if Object is Empty
         // ?--------------------------------------
         isEmpty(obj) {
-            // for(var key in obj) {
-            //     if(obj.hasOwnProperty(key))
-            //         return false;
-            // }
-            // return true;
-
-            // Obreturn Object.keys(obj).length === 0;ect.entries(obj).length === 0 && obj.constructor === Object
             return Object.keys(obj).length === 0;
         }
           
@@ -443,7 +477,7 @@
                             sortingOptions = {sortingOptions} 
                             onClick = {this.changelistLayout}
                             selectedFilter = {selectedFilter}
-                            onSelectChange = {this.handleFilterSelectChange}
+                            onSelectChange = {this.handleSortingSelectChange}
                             listActive =  {listLayout}/>
         }
 
@@ -455,7 +489,7 @@
             const {searchResults} = this.state;
             // console.log('TCL: ListResults -> renderResultsList -> searchResults', searchResults)
             // console.log('TCL: ListResults -> renderResultsList -> searchResults', ...searchResults)
-            return <ResultsList searchResults = {searchResults} />
+            return  <ResultsList searchResults = {searchResults} />
         }
 
 
@@ -473,8 +507,7 @@
         // Render List View
         // --------------------------------------
         renderListView() {
-            const {listLayout,activeFilters} = this.state;
-			console.log("TCL: ListResults -> renderListView -> activeFilters", activeFilters)
+            const {searchResults} = this.state;
             return (
                 <Fragment> 
                     <div className = "page-content">
@@ -485,39 +518,52 @@
                         
                         <div className = "section-full content-inner bg-white">
                             <div className = "container">
-                                <div className = "row">
-                                    
-                                    <div className="col-sm-4 col-md-4 col-lg-3">
-                                        {this.renderSideBar()}
-                                    </div>
-                                    
-                                    
-                                    <div className = "col-sm-8 col-md-8 col-lg-9">
-                                        <div className = "row">
-                                            <div className = "p-lr15 clearfix ">
-                                                {activeFilters && this.renderCurrenFilters(activeFilters)}
-                                                {this.renderResultsSorting()}
-                                            </div>
-                                            
-                                            <div className = "dlab-blog-grid-3">
-                                                <div className = "col-md-12">
 
-                                                    {listLayout === true ? this.renderResultsList() : this.renderResultsGrid()}
-
-                                                </div>
-                                            </div>
-                                            
-                                            
-                                            {this.renderPagination()}
-                                            
-                                        </div>
-                                    </div>
-                                    
-                                </div>
+                                {
+                                    searchResults.length > 0 ? this.renderResults() : <h2> No hubo resultados con tu Búsqueda </h2>
+                                }  
+                              
                             </div>
                         </div>
                     </div>
                 </Fragment>
+            )
+        }
+
+
+
+        renderResults() {
+            const {listLayout,activeFilters} = this.state;
+            return (
+                    <div className = "row">
+                                    
+                        <div className="col-sm-4 col-md-4 col-lg-3">
+                            {this.renderSideBar()}
+                        </div>
+
+
+                        <div className = "col-sm-8 col-md-8 col-lg-9">
+                            <div className = "row">
+                                <div className = "p-lr15 clearfix ">
+                                    {activeFilters && this.renderCurrenFilters(activeFilters)}
+                                    {this.renderResultsSorting()}
+                                </div>
+
+                                <div className = "dlab-blog-grid-3">
+                                    <div className = "col-md-12">
+                                        {
+                                            listLayout === true ? this.renderResultsList() : this.renderResultsGrid()
+                                        }
+                                    </div>
+                                </div>
+                                    
+                                    
+                                {this.renderPagination()}
+                                    
+                            </div>
+                        </div>        
+                    </div>
+                
             )
         }
 

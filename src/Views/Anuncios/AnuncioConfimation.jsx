@@ -48,6 +48,27 @@
         ** API Connection
         ** ========================================================================== */
 
+
+                async saveAndUploadAnuncioImages  (anuncioID) {
+                    const {anuncio} = this.props;
+                    const {imagenes_Anuncio} = anuncio;
+					console.log("TCL: AnuncioConfimation -> imagenes_Anuncio", imagenes_Anuncio)
+                    const carImagesUploaded = await  this.uploadCarImages(imagenes_Anuncio) ;
+
+                    // Iterate Data to Save into DB
+                    let saveImagesPromises = [];
+                    for(let imageDB of carImagesUploaded) {
+                        // Create Data To Save intoDB
+                       
+                        saveImagesPromises.push(this.saveImage(anuncioID, imageDB.data.url))
+                    }
+
+
+
+                    //  = this.publish2()
+                }
+
+
                 // --------------------------------------
                 // Publicar Anuncio
                 // --------------------------------------
@@ -56,29 +77,14 @@
                     const {anuncio} = this.props;
                     const {mainImage} = anuncio;
 
-                    // this.setState({
-                    //     anuncioSaved : true
-                    // })
-
-
-                      // Crear Anuncio
-                    //   const currentUserData = JSON.parse(sessionStorage.getItem('userData'))
-                    //   const crearAnuncioPromise = await this.saveAnuncio(anuncio, 45, 'http://carzone.dexignlab.com/xhtml/images/blog/grid/pic1.jpg', currentUserData)
-                    //   const crearAnuncioData = await crearAnuncioPromise.data;
-                    //   console.log("TCL: AnuncioConfimation -> publish -> crearAnuncioData", crearAnuncioData)
-                    
-
-					// console.log("TCL: AnuncioConfimation -> publish -> mainImage", mainImage)
-                    // console.log("TCL: AnuncioConfimation -> anuncio", anuncio)
-
+                   
                     // Crear Vehiculo
                     const saveVehiculoPromise =  this.saveVehiculo(anuncio);
                    
                     // Guardar Imagenes
                     const uploadMainImagePromise =  this.uploadImage(mainImage);
 
-                    // 
-                    // const currentUserData = JSON.parse(sessionStorage.getItem('userData'))
+                   
                     
                     
 
@@ -97,16 +103,8 @@
 
                   
 
-                    // const crearAnuncioPromise = await this.saveAnuncio(anuncio, lastVehiculoID.last_Vehiculo, uploadMainImageURl.url, currentUserData)
-                    // const crearAnuncioData = await crearAnuncioPromise.data;
-                    // console.log("TCL: AnuncioConfimation -> publish -> crearAnuncioData", crearAnuncioData)
-                    
-                    // console.log("TCL: AnuncioConfimation -> publish -> lastVehiculoID", lastVehiculoID)
-					// console.log("TCL: AnuncioConfimation -> publish -> uploadMainImageURl", uploadMainImageURl)
-
-
-                    // console.log("TCL: AnuncioConfimation -> publish -> saveVehiculoData", saveVehiculoData)
-
+                    // save Other Images
+                    await this.saveAndUploadAnuncioImages(crearAnuncioData.last_Anuncio.last_Anuncio);
 
                     
                     this.setState({anuncioSaved : true})
@@ -155,6 +153,7 @@
                 // --------------------------------------
                 // Save Anuncio
                 // --------------------------------------
+                
                 async saveAnuncio  (anuncio, idVehiculo, mainImageURL, userData ) {
 					console.log("TCL: AnuncioConfimation -> saveAnuncio -> mainImage", mainImageURL)
                     console.log("TCL: AnuncioConfimation -> saveAnuncio -> idVehiculo", idVehiculo)
@@ -216,7 +215,7 @@
                     let formData = new FormData();
                     formData.append('file', image);
           
-                    return axios.post(`http://localhost:8080/SR_seminuevos/backendFinal/WS/upload/upload.php`, 
+                    return axios.post(Endpoints.uploadImage, 
                         formData,
                         {
                         headers: {
@@ -225,6 +224,49 @@
                       }
                     )
 
+                }
+
+
+
+                 // --------------------------------------
+                // Upload Image
+                // --------------------------------------
+        
+                async saveImage(anuncioID, imagenURL) {
+                    const formData = new FormData();
+                              formData.set('id_anuncio' , (anuncioID - 1));
+                              formData.set('ruta_imagen' , imagenURL);
+                               
+          
+                    return axios.post(Endpoints.saveAnuncioImage, 
+                        formData,
+                        {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        }
+                      }
+                    )
+
+                }
+
+
+                // ?--------------------------------------
+                // ? Upload all Images
+                // ?--------------------------------------
+                async uploadCarImages (imagesArray) {
+                    let promises = [];
+					
+                    for(let image of imagesArray) {
+                        promises.push(this.uploadImage(image))
+                        
+                    }
+                    console.log("TCL: AnuncioConfimation -> uploadCarImages -> promises", promises)
+
+
+                    // Upload All images
+                    return Promise.all(promises)
+  
                 }
 
         /* ==========================================================================
@@ -278,10 +320,10 @@
             // ultimoDigito: null
             // year: {value: undefined, label: "Selecciona el Año"}
             // --------------------------------------
-            renderAnuncioData(anuncioData) {
-				console.log("TCL: AnuncioConfimation -> renderAnuncioData -> anuncioData", anuncioData)
-                return (
-                    <div className="sr-anuncioDataContainer">
+            // renderAnuncioData(anuncioData) {
+			// 	console.log("TCL: AnuncioConfimation -> renderAnuncioData -> anuncioData", anuncioData)
+            //     return (
+            //         <div className="sr-anuncioDataContainer">
                        
                        
 
@@ -290,33 +332,33 @@
                         
                        
 
-                        <div className="sr-cardHeader"><h4> Imágenes  <br/></h4></div>
+            //             <div className="sr-cardHeader"><h4> Imágenes  <br/></h4></div>
 
 
-                        <div className="row">
-                            <div className="sr-navButtons">
+            //             <div className="row">
+            //                 <div className="sr-navButtons">
 
-                                <div className="col-md-6">
-                                    <AppButton
-                                        buttonClass={"site-button button-lg btn-block "}
-                                        buttonText={'Anterior'}
-                                        onClick={this.props.changePrevTab} />
-                                </div>
+            //                     <div className="col-md-6">
+            //                         <AppButton
+            //                             buttonClass={"site-button button-lg btn-block "}
+            //                             buttonText={'Anterior'}
+            //                             onClick={this.props.changePrevTab} />
+            //                     </div>
                                 
-                                <div className="col-md-6">
-                                    <AppButton
-                                        buttonClass={"site-button button-lg btn-block "}
-                                        buttonText={'Publicar'}
-                                        onClick={this.publish} />
-                                </div>
+            //                     <div className="col-md-6">
+            //                         <AppButton
+            //                             buttonClass={"site-button button-lg btn-block "}
+            //                             buttonText={'Publicar'}
+            //                             onClick={this.publish2} />
+            //                     </div>
                                     
 
-                            </div>
-                        </div>
+            //                 </div>
+            //             </div>
                        
-                    </div>
-                )
-            }
+            //         </div>
+            //     )
+            // }
 
             // --------------------------------------
             // Iterate Images Data
