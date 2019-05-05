@@ -20,9 +20,9 @@
         // --------------------------------------
         // Constructor
         // --------------------------------------
-        constructor(props) {
-            super(props);
-        }
+        // constructor(props) {
+        //     super(props);
+        // }
 
         // --------------------------------------
         // Render OptionsBox
@@ -35,7 +35,7 @@
                 <Fragment>
                     <div className="product-brand">
                         {options.map((option)=> {
-							console.log("TCL: OptionsBox -> renderOptionsBox -> option", option)
+							
                             return (
                                 <CheckBoxes 
                                     key = {`chk-${option.label}`} 

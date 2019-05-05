@@ -18,7 +18,7 @@
 // --------------------------------------
     const CheckBoxes = (props) => {
         const {id, label, value, onChange, checked} = props;
-		console.log("TCL: CheckBoxes -> checked", checked)
+		
 
         // --------------------------------------
         // Render Component

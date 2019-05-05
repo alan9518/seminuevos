@@ -29,7 +29,7 @@
 
         let end_loop = start_loop + 4;
 
-        console.log("TCL: Pagination -> totalPages", totalPages)
+        // console.log("TCL: Pagination -> totalPages", totalPages)
 
 
         // Iterate To Create Items List
@@ -52,7 +52,7 @@
                 
             }
 
-            console.log("TCL: renderPaginationItems -> itemsLayout", itemsLayout)
+            // console.log("TCL: renderPaginationItems -> itemsLayout", itemsLayout)
 
             return itemsLayout
         }
@@ -64,7 +64,7 @@
 
                     {
                         // currentPage > 1 && <li class="previous"><a href="#"><i class="fa fa-angle-double-left"></i></a></li>
-                        currentPage >= 1 &&  totalPages > 1  &&  <PaginationItem  
+                        currentPage > 1   &&  <PaginationItem  
                                                 key = {`pagItem-prev`} 
                                                 onItemClick = {props.onItemClick} 
                                                 pageCounter = {'prev'} 

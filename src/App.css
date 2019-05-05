@@ -11933,10 +11933,10 @@ Spacing End Alignment
   height: 50px;
 }
 
-.contact-style-1 .site-button {
-  /* height: 50px; */
+/* .contact-style-1 .site-button {
+  height: 50px;
   max-width: 100%;
-}
+} */
 
 .contact-style-1 .form-control {
   padding: 10px 20px;

@@ -23,11 +23,11 @@ const ResultItemUser = (props) => {
     // --------------------------------------
     // Extract Vehicle
     // --------------------------------------
-        const {vehicle, isFeatured, editVehicle} =  props;
+        const {vehicle,  editVehicle} =  props;
         
-        const {id_anuncio, id, titulo, precio, imagen_destacada, shortDescription, year , kilometraje, transmision, equipamento } = vehicle;
+        const {id_anuncio, id, titulo, precio, imagen_destacada, shortDescription, tipo_anuncio, year , kilometraje, transmision, equipamento } = vehicle;
         
-     
+        const isFeatured = tipo_anuncio === 'premium' ? true : false;
 
 
         const renderEquipamento = (equipamento)=> {

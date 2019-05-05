@@ -27,10 +27,16 @@
      *  WebService EndPoints
      ========================================================================== */
         // --------------------------------------
-        // Get All Products
+        // Get All Marcas
         // --------------------------------------
             getAllMarcas : `${path}/Marca/getMarcas.php`,
             // getAllMarcas : 'https://srseminuevos.com/server/Marca/getMarcas.php',
+
+        // --------------------------------------
+        // Get Marcas With Anuncios
+        // --------------------------------------
+            getAllMarcasWithAnuncios : `${path}/Marca/getMarcasWithAnuncios.php`,
+        // getAllMarcas : 'https://srseminuevos.com/server/Marca/getMarcas.php',
             
         // --------------------------------------
         // Get Marcas By Name
@@ -49,6 +55,11 @@
         // Get All Categories
         // --------------------------------------
             getAllEstados : `${path}/Estado/getEstados.php`,
+
+        // --------------------------------------
+        // Get All Categories
+        // --------------------------------------
+            getAllEstadosWithAnuncios : `${path}/Estado/getEstadosWithAnuncios.php`,
 
         // --------------------------------------
         // Get Count for Pagination all Anuncios
@@ -82,6 +93,17 @@
         // @returns {}
         // -------------------------------------- */
             getAllAnunciosWithParams : `${path}/Anuncios/getAllAnunciosWithParams.php`, 
+
+
+        /** --------------------------------------
+        // Get Anuncios With Filters
+        // @param {searchCat <String>}
+        // @param {idToSearch <int>}
+        // @param {startPage <int>}
+        // @param {endPage <int>}
+        // @param {filters <string>}
+        // --------------------------------------*/
+            getAnunciosByUser : `${path}/Anuncios/getAnunciosByUser.php`,
         
                 
         /** --------------------------------------
@@ -91,7 +113,7 @@
         // @param {startPage <int>}
         // @param {endPage <int>}
         // --------------------------------------*/
-            getAnunciosByUser : `${path}/Anuncios/getAnunciosByUser.php`,
+            getAllAnunciosWithFilters : `${path}/Anuncios/FilterAnuncios.php`,
             
         
         /** --------------------------------------
@@ -165,6 +187,17 @@
         // --------------------------------------*/
             registerUser : `${path}/Usuarios/addUsuario.php`,
 
+
+        /** --------------------------------------
+        // Register User
+        // @param {correo_usuario <String>}
+        // @param {nombre_usuario <String>}
+        // @param {apellidos_usuario <String>}
+        // @param {tel_usuario <String>}
+        // @param {pass_usuario <String>}
+        // --------------------------------------*/
+            editUser : `${path}/Usuarios/editUsuario.php`,
+
         // --------------------------------------
         // GET All Vehiculos
         // --------------------------------------        
@@ -178,7 +211,7 @@
 
 
         // --------------------------------------
-        // Save Vehiculo
+        // Save Anuncio
         // --------------------------------------
             
             addAnuncio : `${path}/Anuncios/AddAnuncio.php`,

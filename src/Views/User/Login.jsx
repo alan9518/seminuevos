@@ -93,13 +93,24 @@ class Login extends Component {
         onSubmit = async (event) => {
             event.preventDefault();
             this.setState({loadingLogin : true});
+            const context = this;
             
             const {isAgency, createNewUser} = this.state;
 			console.log('TCL: Login -> onSubmit -> createNewUser', createNewUser)
             let userAction = null;
 
-            if(!createNewUser)
+            if(!createNewUser) {
                 userAction =  !isAgency? await this.loginUser() : await this.loginAgency();
+                // context.successLogin(userAction);
+                 if(userAction.error) {
+                    context.setState({errorLogin : true , loadingLogin : false})
+                    context.createErrorAlert('Error al iniciar sesión. Revisa tus creadenciales e intentalo de nuevo    ')
+                }
+                    
+                else    
+                    context.successLogin(userAction);
+            }
+                
 			else
                 userAction = await this.registerUser();
                 
@@ -107,13 +118,13 @@ class Login extends Component {
                 console.log("TCL: Login -> onSubmit -> userAction", userAction)
                 
 
-            if(userAction.error) {
-                this.setState({errorLogin : true , loadingLogin : false})
-                this.createErrorAlert('Error al iniciar sesión. Revisa tus creadenciales e intentalo de nuevo    ')
-            }
+            // if(userAction.error) {
+            //     context.setState({errorLogin : true , loadingLogin : false})
+            //     context.createErrorAlert('Error al iniciar sesión. Revisa tus creadenciales e intentalo de nuevo    ')
+            // }
                 
-            else    
-                this.successLogin(userAction);
+            // else    
+            //     context.successLogin(userAction);
                 
         }
 
@@ -157,6 +168,7 @@ class Login extends Component {
             const loginPromise =  await axios.get(Endpoints.loginUser,settings);
             // const loginData =  await loginPromise.data;
             const loginData =  await {...loginPromise.data, tipoUsuario : 'usuario'};
+			console.log("TCL: Login -> loginUser -> loginData", loginData)
             return loginData
         }
 
@@ -192,6 +204,7 @@ class Login extends Component {
         // --------------------------------------*/
         async registerUser() {
             const {nameUsuario, lastNameUsuario, phoneUsuario,  emailUsuario, passUsuario} = this.state;
+            const context = this;
             const settings = { 
                 headers : { 
                     'Content-Type': 'application/json',
@@ -214,7 +227,7 @@ class Login extends Component {
                 data.set('tel_usuario' , phoneUsuario)
 
 
-                axios({
+            axios({
                     method: 'post',
                     url: Endpoints.registerUser,
                     data: data,
@@ -226,13 +239,14 @@ class Login extends Component {
                     .then(function (response) {
                         //handle success
                         console.log(response);
-                        this.createSuccessAlert('Usuario creado')
+                        context.createSuccessAlert('Usuario creado')
+                        context.successLogin(response);
                     })
                     .catch(function (response) {
                         //handle error
                         console.log(response);
-                        this.createErrorAlert('Hubo un problema al crear tu ususario. Por avor intentalo de nuevo');
-                });
+                        context.createErrorAlert('Hubo un problema al crear tu ususario. Por avor intentalo de nuevo');
+            });
 
         
         }

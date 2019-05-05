@@ -43,8 +43,10 @@
                 resultsCount : 0,
                 isLoaded : false,
                 loadingData : false,
-                itemsPerPage : 6,
-               
+                itemsPerPage : 12,
+                estadosFilter : null,
+                marcasFilter : null,
+                yearsFilter : {startYear : 0, endYear :  2019},
             }
             this.searchValues = {}
             
@@ -60,7 +62,8 @@
 			
 
             const searchValues = queryString.parse(search);
-            this.searchValues =  searchValues;
+            this.setState({searchValues})
+            // this.searchValues =  searchValues;
 
             
             
@@ -230,8 +233,114 @@
             }
 
 
+            /** --------------------------------------
+            // Get Anuncios Data With Sidebar Filters
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnunciosWithFilters(searchParams = this.state.searchParams, page = 1, sortBy = 'highDate') {
+				console.log("TCL: ListResults -> getAnunciosDataWithSearchParams -> searchParams", searchParams)
+                const {currentPage, itemsPerPage, activeFilters} = this.state
+                console.log("TCL: getAnunciosWithFilters -> activeFilters", activeFilters)
+                
+                // this.splitFilters(activeFilters)
+
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnunciosWithFilters, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        tipo : searchParams.tipo,
+                        marca : searchParams.marca,
+                        modelo : searchParams.modelo,
+                        ubicacion : searchParams.ubicacion,
+                        precioBase : searchParams.precioBase ,
+                        precioTope : searchParams.precioTope,
+                        filters : this.splitFilters(activeFilters),
+                        page : page || currentPage,
+                        items : itemsPerPage,
+                        sortBy : sortBy,
+                    }
+                });
+                const anunciosData = await loadAnunciosPromise.data;
+				console.log("TCL: getAnunciosWithFilters -> anunciosData", anunciosData)
+            
+                return anunciosData;
+            }
 
 
+
+            async getAnunciosWithFiltersNoSearchParams(estadosFilter, marcasFilter, yearsFilter,  page = 1, sortBy = 'highDate') {
+
+                const {currentPage, itemsPerPage} = this.state
+                const loadAnunciosPromise = await axios.get(Endpoints.getAllAnunciosWithFilters, { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        page : page || currentPage,
+                        items : itemsPerPage,
+                        sortBy : sortBy,
+                        estadosFilter : estadosFilter || null,
+                        marcasFilter : marcasFilter || null,
+                        startYear : yearsFilter.startYear || null,
+                        endYear : yearsFilter.endYear || null
+                        
+                    }
+                });
+                const anunciosData = await loadAnunciosPromise.data;
+				console.log("TCL: ListResults -> getAnunciosData -> anunciosData", anunciosData)
+            
+                return anunciosData;
+
+				// console.log("TCL: ListResults -> getAnunciosDataWithSearchParams -> searchParams", searchParams)
+                // const {currentPage, itemsPerPage, activeFilters} = this.state
+                // console.log("TCL: getAnunciosWithFilters -> activeFilters", activeFilters)
+                
+                // // this.splitFilters(activeFilters)
+
+                // const loadAnunciosPromise = await axios.get(Endpoints.getAllAnunciosWithFilters, { 
+                //     headers : { 
+                //         'Content-Type': 'application/json',
+                //         'Accept': 'application/json',
+                //     },
+                //     params : {
+                //         tipo : searchParams.tipo,
+                //         marca : searchParams.marca,
+                //         modelo : searchParams.modelo,
+                //         ubicacion : searchParams.ubicacion,
+                //         precioBase : searchParams.precioBase ,
+                //         precioTope : searchParams.precioTope,
+                //         filters : this.splitFilters(activeFilters),
+                //         page : page || currentPage,
+                //         items : itemsPerPage,
+                //         sortBy : sortBy,
+                //     }
+                // });
+                // const anunciosData = await loadAnunciosPromise.data;
+				// console.log("TCL: getAnunciosWithFilters -> anunciosData", anunciosData)
+            
+                // return anunciosData;
+            }
+
+
+
+            // ?--------------------------------------
+            // ? Split Active Filters into String
+            // ?--------------------------------------
+            splitFilters (activeFilters) {
+                const filters = activeFilters.map((f)=> { 
+					
+                    let filterString = `${f.filterName}:${f.value.trim()}`;
+                    return filterString
+                })
+
+              
+
+                return filters.join().trim();
+            }
             
             /** --------------------------------------
             // Filter By Ubication
@@ -239,20 +348,78 @@
             // @param {estado, municipio}
             // @returns {An Promise Object}
             // --------------------------------------*/
-            filterByUbication = ( estado, ciudad) =>{
+
+            filterByUbication = (activeEstados) =>{
+			    console.log("TCL: filterByUbication -> activeEstados", activeEstados)
 			
-                const {activeFilters} = this.state;
+                const {estadosFilter, marcasFilter, yearsFilter} = this.state;
+				
 
-                estado.value !== null && activeFilters.push({filterName : 'estado', displayText : 'Estado',  value : `${estado.label} `});
-                ciudad.value !== null && activeFilters.push({filterName : 'ciudad', displayText : 'Ciudad',  value : `${ciudad.label}`});
 
-                this.setState({
-                    activeFilters : activeFilters
-                })
+                if(this.isEmpty(this.searchValues)) {
+                    //  Add Estado Filtes to New Query
 
-			
+                    const filters = activeEstados.map((f, index)=> { 
+					console.log("TCL: filterByUbication -> index", index)
+					
+                        // let filterString = `${f.filterName}:${f.value.trim()}`;
+                        // let filterString = `estado.${f.value.trim()}${ index >= activeEstados.length - 1 ? '' : 'OR'}`; \
+                        let filterString = `estado.${f.value.trim()}`; 
+                        return filterString
+                    })
+
+
+                    let estadosFilter =  filters.join(' OR ').trim();
+                    console.log("TCL: filterByUbication -> estadosFilter", estadosFilter)
+                    
+                    this.setState({
+                        estadosFilter : estadosFilter
+                      
+                    })
+
+
+                    this.applyFilter(estadosFilter, this.state.marcasFilter, this.state.yearsFilter);
+                }
+
+
+
+             
+
+
                
                 
+            }
+
+
+             /** --------------------------------------
+            // Filter By Years
+            // With Promises
+            // @param {estado, municipio}
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            filterByYears = (startYear, endYear) =>{
+				console.log("TCL: filterByYears -> endYear", endYear)
+                console.log("TCL: filterByYears -> startYear", startYear)
+                    
+                if(this.isEmpty(this.searchValues)) {
+
+
+                    // let filterString = `start.${}} `; 
+                    const yearsFilter = {startYear, endYear}
+    
+                    // let estadosFilter =  filters.join(' OR ').trim();
+                    // console.log("TCL: filterByUbication -> estadosFilter", estadosFilter)
+
+                    this.setState({
+                        yearsFilter : yearsFilter
+                    
+                    })
+    
+    
+                    this.applyFilter(this.state.estadosFilter, this.state.marcasFilter, yearsFilter);
+                }
+                    
+			
             }
 
 
@@ -262,18 +429,33 @@
             // @param {estado, municipio}
             // @returns {An Promise Object}
             // --------------------------------------*/
-            filterByMarca = ( marca) =>{
+            filterByMarca = ( activeMarcas ) =>{
                 
-                console.log("TCL: ListResults -> filterByMarca -> marca", marca)
-				
-                const {activeFilters} = this.state;
+                if(this.isEmpty(this.searchValues)) {
+                    //  Add Estado Filtes to New Query
 
-                
-                marca.value !== null && activeFilters.push({filterName : 'marca', displayText : 'Marca',  value : `${marca.label}`});
+                    const filters = activeMarcas.map((f, index)=> { 
+					console.log("TCL: filterByUbication -> index", index)
+					
+                        // let filterString = `${f.filterName}:${f.value.trim()}`;
+                        // let filterString = `estado.${f.value.trim()}${ index >= activeMarcas.length - 1 ? '' : 'OR'}`; \
+                        let filterString = `marca.${f.value.trim()}`; 
+                        return filterString
+                    })
 
-                this.setState({
-                    activeFilters : activeFilters
-                })
+
+                    let marcasFilter =  filters.join(' OR ').trim();
+                    console.log("TCL: filterByUbication -> estadosFilter", marcasFilter)
+                    
+                    this.setState({
+                       
+                        marcasFilter : marcasFilter,
+                       
+                    })
+
+
+                    this.applyFilter(this.state.estadosFilter, marcasFilter, this.state.yearsFilter);
+                }
 
             }
 
@@ -326,7 +508,8 @@
             // Update Data
             // getAnunciosDataWithSearchParams
             // this.getAnunciosData(newPage,selectedFilter.value)
-            if(!this.isEmpty(this.searchValues)) {
+            // if(!this.isEmpty(this.searchValues)) {
+                if(!this.isEmpty(this.searchValues)) {
                 
                 this.getAnunciosDataWithSearchParams(this.searchValues, newPage ,selectedFilter.value) 
                     .then((data)=> {
@@ -408,8 +591,27 @@
         cleanFilterOptions = ()=> {
             this.setState({
                 activeFilters : []
-
             })
+        }
+
+
+        // ?--------------------------------------
+        // ? Remove Filter From State
+        // ?--------------------------------------
+        removeFilter = ( filter)=> {
+			
+            console.log("TCL: removeFilter -> filter", filter.target)
+            console.log("TCL: removeFilter -> filter", filter.currentTarget.name)
+            const name = filter.target.getAttribute('name'); 
+
+            let filteredFilters = this.state.activeFilters.filter((x,index) => {
+              
+                return (x.value.trim() !== name.trim())
+               
+            })
+
+            this.setState({activeFilters : filteredFilters});
+            
         }
 
         // ?--------------------------------------
@@ -417,6 +619,42 @@
         // ?--------------------------------------
         isEmpty(obj) {
             return Object.keys(obj).length === 0;
+        }
+
+
+
+        // ?--------------------------------------
+        // ? Apply SideBar Filter
+        // ?--------------------------------------
+        applyFilter = (estadosFilter = this.state.estadosFilter, marcasFilter = this.state.marcasFilter,  yearsFilter = [])=> {
+
+            const context = this;
+            // Add Only Estados to query
+            // if (estadosFilter !== null && marcasFilter === null && yearsFilter ===  null) {
+            //     console.log("TCL: applyFilter -> estadosFilter", estadosFilter)
+                
+            //     this.getAnunciosWithFiltersNoSearchParams(estadosFilter, marcasFilter, yearsFilter,1 ,this.state.selectedFilter.value)
+
+            // }
+
+            this.getAnunciosWithFiltersNoSearchParams(estadosFilter, marcasFilter, yearsFilter, 1 ,this.state.selectedFilter.value).then((data)=> {
+				console.log("TCL: applyFilter -> data", data)
+                context.setState({
+                    searchResults : data,
+                    estadosFilter : estadosFilter,
+                    marcasFilter : marcasFilter,
+                    // yearsFilter : yearsFilter || [],
+
+                })
+            })
+            .catch((error)=> {
+				console.log("TCL: applyFilter -> error", error)
+                
+            })
+
+          
+
+            
         }
           
 
@@ -447,9 +685,8 @@
         // Render Current Filters
         // --------------------------------------
         renderCurrenFilters(filters) {
-            console.log("TCL: ListResults -> renderCurrenFilters -> filters", filters)
             
-            return (<ActiveFilters filters = {filters} cleanFilterOptions = {this.cleanFilterOptions}/>);
+            return (<ActiveFilters filters = {filters} cleanFilterOptions = {this.cleanFilterOptions} removeFilterFromArray = {this.removeFilter} />);
 
         }
 
@@ -457,7 +694,7 @@
         // Render SideBar
         // --------------------------------------
         renderSideBar() {
-            return <SideBar sideBarTitle = {"Filtros de Búsqueda"} filterByUbication = {this.filterByUbication} filterByMarca = {this.filterByMarca}/>
+            return <SideBar sideBarTitle = {"Filtros de Búsqueda"} filterByUbication = {this.filterByUbication} filterByMarca = {this.filterByMarca} filterByYears = {this.filterByYears}/>
         }
 
         // --------------------------------------
@@ -487,9 +724,9 @@
         // --------------------------------------
         renderResultsList() {
             const {searchResults} = this.state;
-            // console.log('TCL: ListResults -> renderResultsList -> searchResults', searchResults)
+            console.log('TCL: ListResults -> renderResultsList -> searchResults', searchResults)
             // console.log('TCL: ListResults -> renderResultsList -> searchResults', ...searchResults)
-            return  <ResultsList searchResults = {searchResults} />
+            return  <ResultsList searchResults = {searchResults} editResults = {false}/>
         }
 
 

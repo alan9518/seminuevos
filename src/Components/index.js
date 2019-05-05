@@ -77,6 +77,7 @@
     import ActiveFilters from './Widgets/ActiveFilters/ActiveFilters';
     import FilterItem from './Widgets/ActiveFilters/FilterItem';
     import Destacado from './Widgets/Destacados/Destacado' ;
+    import Clasico from './Widgets/Destacados/Clasico' ;
 
 // --------------------------------------
 // Export Components
@@ -139,6 +140,7 @@
         ActiveFilters,
         FilterItem,
         Destacado,
+        Clasico,
         // --------------------------------------
         // Form Steps
         // --------------------------------------

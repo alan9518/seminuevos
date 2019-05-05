@@ -8,7 +8,7 @@
 // Import Dependences
 // --------------------------------------
     import React, { Fragment }  from 'react';
-    import {ProjectLink, Destacado} from '../../Components'
+    import {ProjectLink, Destacado, Clasico} from '../../Components'
     import PropTypes from 'prop-types'
 
 
@@ -17,16 +17,18 @@
 // Create Component
 // --------------------------------------
     const ResultItem = (props) => {
-        console.log('props', props);
+        
 
         // --------------------------------------
         // Extract Vehicle
         // --------------------------------------
-            const {vehicle, isFeatured, editVehicle} =  props;
+            const {vehicle,  editVehicle} =  props;
+			// console.log("TCL: ResultItem -> vehicle", vehicle)
 			
-            const {id_anuncio, id, titulo, precio, imagen_destacada, shortDescription, year , kilometraje, transmision, equipamento } = vehicle;
-			
-         
+            const {id_anuncio, id, titulo, precio, imagen_destacada, shortDescription, year , kilometraje, transmision, equipamento, tipo_anuncio } = vehicle;
+            
+            const isFeatured = tipo_anuncio === 'premium' ? true : false;
+            const isClasico = tipo_anuncio === 'clasico' ? true : false;
 
 
             const renderEquipamento = (equipamento)=> {
@@ -67,7 +69,8 @@
            
             <Fragment> 
                 <div className = "blog-post blog-md clearfix date-style-2 list-view m-b30">
-                    {isFeatured && <Destacado/>}
+                    {isFeatured && <Destacado/>  }
+                    {isClasico &&  <Clasico/>}
                     <div className = "dlab-post-media dlab-img-effect zoom-slow"> 
                         <ProjectLink route  = {`/anuncio/${id_anuncio}`}>
                             <img src= {setImagenDestacada(imagen_destacada)}  alt=""/>

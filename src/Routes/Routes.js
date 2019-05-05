@@ -14,7 +14,8 @@
     import LoginView from '../Views/User/Login';
     import PrivacidadView from '../Views/Pages/AvisoDePrivacidad';
     import SeguridadView from '../Views/Pages/ConsejosDeSeguridad';
-    import nuevoAnuncioRoute from '../Views/Anuncios/NewAnuncio';
+    import NuevoAnuncioView from '../Views/Anuncios/NewAnuncio';
+    import EditAnuncioView from '../Views/EditarAnuncios/EditAnuncio';
     import UserHomeView from '../Views/User/UserHome';
     import NormaView from '../Views/Pages/norma';
 
@@ -66,7 +67,7 @@
             exact : true,
             key : 'nuevoAnuncio-route',
             navBarName : 'Crear Anuncio',
-            component : nuevoAnuncioRoute
+            component : NuevoAnuncioView
 
         },
         {
@@ -103,6 +104,12 @@
             exact: false,
             key : 'producto-route',
             component : DetailsView,
+        },
+        {
+            path : `${path}/editar-anuncio/:ID`,
+            exact: false,
+            key : 'editar-producto-route',
+            component : EditAnuncioView,
         },
         {redirect:true, path:'/', to : `${path}/`, navbarName: 'Redirect', key : 'index-route' }
     ]

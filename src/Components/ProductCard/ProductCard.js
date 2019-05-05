@@ -8,7 +8,7 @@
  // Import Dependences
  // --------------------------------------
     import React, { Component, Fragment }  from 'react';
-    import {ProjectLink} from '../../Components/'
+    import {ProjectLink, Clasico, Destacado} from '../../Components/'
     import PropTypes from 'prop-types'
     
 
@@ -19,7 +19,10 @@
 	
         // <img src= {imagen_destacada} alt = {titulo} style = {{maxHeight : 240}}
     
-        const {titulo,id_anuncio,imagen_destacada, precio,year, transmision, kilometraje} = props.vehicle;
+        const {titulo,id_anuncio,imagen_destacada, precio,year, transmision, kilometraje, tipo_anuncio} = props.vehicle;
+
+        const isFeatured = tipo_anuncio === 'premium' ? true : false;
+        const isClasico = tipo_anuncio === 'clasico' ? true : false;
 
 
         const setImagenDestacada = (imagen_destacada) => {
@@ -41,6 +44,8 @@
         return (
             <Fragment>
                 <div className="dlab-feed-list">
+                    {isFeatured && <Destacado grid = {true}/>  }
+                    {isClasico &&  <Clasico grid = {true}/>}
                     <div className="dlab-media"> 
                         <ProjectLink route  = {`/anuncio/${id_anuncio}`}>
                         

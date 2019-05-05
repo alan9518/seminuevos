@@ -16,12 +16,12 @@
 // Create Functional Component
 // --------------------------------------
     const ActiveFilters = (props) => {
-        const {filters, cleanFilterOptions} = props;
+        const {filters, cleanFilterOptions, removeFilterFromArray} = props;
         return (
             <div className = "sr-filtersList"> 
                 {  
                     filters.map((filter)=> {
-                        return <FilterItem displayText = {filter.displayText} value = {filter.value} />
+                        return <FilterItem displayText = {filter.displayText} value = {filter.value} removeFilterFromArray = {props.removeFilterFromArray}/>
                     })
                 }
 

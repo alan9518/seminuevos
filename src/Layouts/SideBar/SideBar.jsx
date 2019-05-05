@@ -30,9 +30,12 @@
 				marcas : [],
 				selectedMarca  : {value: null, label: 'Selecciona la Marca' },
 				selectedEstado: { value: null, label: 'Selecciona el Estado' },
-                selectedMunicipio: { value: null, label: 'Selecciona el Municipio' },
+				selectedMunicipio: { value: null, label: 'Selecciona el Municipio' },
+				startYear : {value: 0, label: ''},
+				endYear : {value: (new Date().getFullYear()), label: ''},
             }
 
+			// this.onChangeSelect =  this.onChangeSelect.bind(this);
 		}
 
 
@@ -60,8 +63,8 @@
 				
 				
 				this.setState({
-					estados : estadosData,
-					marcas : marcasData,
+					estados : this.formatChekBoxData(estadosData),
+					marcas : this.formatChekBoxData(marcasData),
 					isLoaded : true
 				})
 			}
@@ -77,7 +80,7 @@
                         'Accept': 'application/json',
                     }
                 }
-                const loadMarcasPromise = await axios.get(Endpoints.getAllMarcas, { settings });
+                const loadMarcasPromise = await axios.get(Endpoints.getAllMarcasWithAnuncios, { settings });
                 const marcasArray = await loadMarcasPromise.data;
 
                 return marcasArray;
@@ -96,7 +99,7 @@
                         'Accept': 'application/json',
                     }
                 }
-                const loadEstadosPromise = await axios.get(Endpoints.getAllEstados, { settings });
+                const loadEstadosPromise = await axios.get(Endpoints.getAllEstadosWithAnuncios, { settings });
                 const ubicacionArray = await loadEstadosPromise.data;
                 // const ubicacionData = this.formatSelectValues(ubicacionArray);
 
@@ -142,12 +145,92 @@
 				return yearsArray;
 			}
 
+
+			formatChekBoxData(valuesArray) {
+
+				const data = valuesArray.map((valueItem) => {
+			        let data = {
+						checked : false,
+			            label: valueItem.nombre,
+			            value: valueItem.id
+			        }
+			        return data;
+			    })
+			    return data;
+
+			}
+
+
+			// --------------------------------------
+            // Get Activew Checbox Items
+            // --------------------------------------
+			
+            getEstadosItems() {
+                const {estados} = this.state;
+                const estadosValues = estados.filter((es)=>es.checked === true) ;
+
+                return estadosValues;
+			}
+
+
+			// --------------------------------------
+            // Get Activew Checbox Items
+            // --------------------------------------
+			
+            getMarcasItems() {
+                const {marcas} = this.state;
+                const marcasValues = marcas.filter((ma)=>ma.checked === true) ;
+
+                return marcasValues;
+			}
+			
+
+			// --------------------------------------
+            // Toggle CheckBoox State
+            // --------------------------------------
+            onCheckBoxEstadosChange = (event)=> {
+                const {estados}  = this.state;
+                let selectedEstados = estados.map((data)=> {
+                    if(data.value === event.target.value)
+                        data.checked = !data.checked
+                    return data
+                })
+            
+
+                this.setState({
+                    estados : selectedEstados
+                })
+
+			}
+
+			// --------------------------------------
+            // Toggle CheckBoox State
+            // --------------------------------------
+			
+			onCheckBoxMarcasChange  = (event)=> {
+                const {marcas}  = this.state;
+                let selectedMarcas = marcas.map((data)=> {
+                    if(data.value === event.target.value)
+                        data.checked = !data.checked
+                    return data
+                })
+            
+
+                this.setState({
+                    marcas : selectedMarcas
+                })
+
+			}
+
+
+
+
 			// --------------------------------------
 			// Get JSON Response and Format to 
 			// React-select Type
 			// --------------------------------------
-			formatSelectValues(valuesAray) {
-			    const data = valuesAray.map((valueItem) => {
+			formatSelectValues(valuesArray) {
+			    const data = valuesArray.map((valueItem) => {
 			        let data = {
 			            label: valueItem.nombre,
 			            value: valueItem.id
@@ -191,33 +274,67 @@
 			    this.setState({
 			        selectedMarca: selectedMarca
 			    })
-            }
+			}
+			
+			// --------------------------------------
+            // Control Select Inputs
+            // --------------------------------------
+            onChangeStartSelect = (selectedOption) =>{
+				// onChangeSelect(control, selectedOption) {
+					console.log("TCL: onChangeSelect -> selectedOption", selectedOption)
+					// console.log("TCL: onChangeSelect -> control", control)
+					this.setState({
+						startYear : selectedOption
+					})   
+				}
+
+
+
+			// --------------------------------------
+            // Control Select Inputs
+            // --------------------------------------
+            onChangeEndSelect = (selectedOption) =>{
+				// onChangeSelect(control, selectedOption) {
+					console.log("TCL: onChangeSelect -> selectedOption", selectedOption)
+					this.setState({
+						endYear : selectedOption
+					})   
+			}
 
 
 
 			/* ==========================================================================
 			** Call FIlter Methods From Parent
 			** ========================================================================== */
-			// --------------------------------------
-			// Apply Ubication Filter
-			// --------------------------------------
-			filterByUbication = (event)=> {
-				const {selectedEstado, selectedMunicipio} = this.state;
-				// console.log("TCL: SideBar -> filterByUbication -> selectedMunicipio", selectedMunicipio)
-				// console.log("TCL: SideBar -> filterByUbication -> selectedEstado", selectedEstado)
+				// --------------------------------------
+				// Apply Ubication Filter
+				// --------------------------------------
+				filterByUbication = (event)=> {
+					
+					const activeEstados = this.getEstadosItems() ;
+					
+					this.props.filterByUbication(activeEstados)
+				}
 
-				this.props.filterByUbication(selectedEstado, selectedMunicipio)
-			}
 
+				// --------------------------------------
+				// Apply Marca Filter
+				// --------------------------------------
+				filterByMarca = (event)=> {
+					const activeMarcas = this.getMarcasItems() ;
 
-			// --------------------------------------
-			// Apply Marca Filter
-			// --------------------------------------
-			filterByMarca = (event)=> {
-				const {selectedMarca} = this.state;
+					this.props.filterByMarca(activeMarcas);
+				}
 
-				this.props.filterByMarca(selectedMarca);
-			}
+				// --------------------------------------
+				// Apply Years Filter
+				// --------------------------------------
+
+				filterByYears = (event)=> {
+					const {startYear, endYear} = this.state;
+
+					this.props.filterByYears(startYear.value, endYear.value);
+				}
 
 	/* ==========================================================================
 	 *  Render Methods
@@ -228,8 +345,34 @@
 		// Render Year Selects
 		// --------------------------------------		
 		renderYearSelects() {
-			const startYearSelect = <SingleSelect  isClearable={false} isSearchable={true} options={this.getyearsArray()} name = {'startYearSelect'}/>
-			const endYearSelect = <SingleSelect  isClearable={false} isSearchable={true} options={this.getyearsArray()} name = {'endYearSelect'}/>
+			const {startYear, endYear}= this.state;
+			// const startYearSelect = <SingleSelect  isClearable={false} isSearchable={true} options={this.getyearsArray()} name = {'startYearSelect'} value = {startYear}/>
+			// const endYearSelect = <SingleSelect  isClearable={false} isSearchable={true} options={this.getyearsArray()} name = {'endYearSelect'} value = {endYear}/>
+
+			const startYearSelect =  <Select
+										className="basic-single"
+										classNamePrefix="select"
+										defaultValue = {startYear}
+										isClearable={false}
+										isSearchable={true}
+										name = {'startYearSelect'}
+										value={startYear}
+										onChange={this.onChangeStartSelect}
+										options={this.getyearsArray()} 
+									/>
+
+			const endYearSelect =  <Select
+										className="basic-single"
+										classNamePrefix="select"
+										defaultValue = {endYear}
+										isClearable={false}
+										isSearchable={false}
+										name = {'endYearSelect'}
+										value={endYear}
+										onChange={this.onChangeEndSelect}
+										options={this.getyearsArray()} 
+									/>
+
 			return (
 				
 				<RangeSelect startSelect = {startYearSelect} endSelect = {endYearSelect}/>
@@ -249,7 +392,7 @@
 
 							<div className = "sr-filterItemsContainerItem">
 								<label htmlFor=""> Estado </label>	
-								<Select
+								{/*<Select
 									className="basic-single"
 									classNamePrefix="select"
 									defaultValue={{ value: 0, 'label': 'Selecciona el Estado' }}
@@ -261,10 +404,12 @@
 									options={this.formatSelectValues(estados)}
 									name={'LocationSelect'}
 									onChange={this.handleSelectUbicacionChange}
-								/>
+								/>*/}
+
+								<OptionsBox options = {estados} onChange = {this.onCheckBoxEstadosChange} />
 							</div>
 
-							<div className = "sr-filterItemsContainerItem">
+							{/*<div className = "sr-filterItemsContainerItem">
 								<label htmlFor=""> Ciudad </label>	
 								<Select
 									className="basic-single"
@@ -279,7 +424,7 @@
 									onChange={this.handleSelectMunicipioChange}
 									options={this.formatSelectValues(municipios)}
 								/>
-							</div>
+							</div>*/}
 
 							<div className="sr-FilterButtonContainer">
 								<AppButton 
@@ -308,7 +453,8 @@
 
 					<CustomAccordionItem accordionTitle = {"Marca"} expanded = {true}>
 						<div className="sr-filterItemsContainerItem">
-							<Select
+						<OptionsBox options = {marcas} onChange = {this.onCheckBoxMarcasChange} />
+						{/*	<Select
 								className="basic-single"
 								classNamePrefix="select"
 								defaultValue={marcas[0]}
@@ -321,7 +467,8 @@
 								onChange={this.handleSelectMarcaChange}
 								options={this.formatSelectValues(marcas)}
 							/>
-							</div>
+						*/}							
+						</div>
 
 							<div className="sr-FilterButtonContainer">
 								<AppButton 
@@ -344,7 +491,7 @@
 								<AppButton 
 									buttonClass = "site-button" 
 									buttonText = {'Aplicar'}
-									onClick={this.filterByUbication}>
+									onClick={this.filterByYears}>
 								</AppButton>
 						</div>
 						

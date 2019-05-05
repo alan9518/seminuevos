@@ -37,7 +37,7 @@
                 super(props);
                 this.state = {
                     isLoaded: false,
-                    currentStep: 0,
+                    currentStep: 1,
                     newAnuncio: {
                         tipo_vehiculo : null,
                         id_tipo_anuncio : null,
@@ -128,8 +128,8 @@
                 
                 this.tipoCondicion = [
                     { value: undefined, label: 'Selecciona el Tipo de Transacción' },
-                    { value: 'Nuevo', label: 'Nuevo' },
-                    { value: 'Seminuevo', label: 'Seminuevo' },
+                    { value: 'nuevo', label: 'Nuevo' },
+                    { value: 'seminuevo', label: 'Seminuevo' },
                 ]
 
                 this.tipoAnuncio  = [
@@ -204,10 +204,10 @@
                 ];
                 this.tipoCombustibleData = [
                     { value: undefined, label: 'Selecciona el Tipo de Combustible' },
-                    { value: 'Diesel', label: 'Diésel' },
-                    { value: 'Eléctrico', label: 'Eléctrico' },
-                    { value: 'Gasolina', label: 'Gasolina' },
-                    { value: 'Híbrido', label: 'Híbrido' },
+                    { value: 'diesel', label: 'Diésel' },
+                    { value: 'eléctrico', label: 'Eléctrico' },
+                    { value: 'gasolina', label: 'Gasolina' },
+                    { value: 'híbrido', label: 'Híbrido' },
                 ];
                 
                 
@@ -244,31 +244,128 @@
             // Set Initial Values
             // --------------------------------------
             componentDidMount() {
-                this.loadAPI();
+                const {params} = this.props.match;
+                const {ID} = params;
+				console.log("TCL: NewAnuncio -> componentDidMount -> params", params)
+                
+                
+                this.loadAPI(ID);
+				console.log("TCL: NewAnuncio -> componentDidMount -> this.props", this.props)
                 // this.carroceria();
             }
 
+
+            // --------------------------------------
+            // Get All requests
+            // --------------------------------------
+            async loadAPI(anuncioID) {
+                // Get Anuncio Info
+                const anunciosDetailsPromise =  this.getAnuncioDetails(anuncioID);
+                const imagenesAnuncioPromise =  this.getImagenesAnuncios(anuncioID);
+
+                let marcasArrayPromise =  this.loadMarcas();
+                // this.marcasData = marcasArray;
+                let ubicacionArrayPromise =  this.loadUbicacion();
+                // this.ubicacionData = ubicacionArray;
+
+
+                // Load All Parallel Promimses
+                const [anunciosDetailsData, imagenesAnuncioData, marcasData, ubicacionData]  = await Promise.all([anunciosDetailsPromise, imagenesAnuncioPromise,marcasArrayPromise,ubicacionArrayPromise ])
+				
+
+
+                this.marcasData = marcasData;
+                this.ubicacionData = ubicacionData;
+
+                // Set Modelos 
+                let modelosPromise =  await this.loadModelos(anunciosDetailsData.id_marca);
+                let modelosData =  await modelosPromise.data;
+                
+                // Set Municipios
+                let ciudadesPromise =  await this.loadMunicipios(anunciosDetailsData.estado);
+                let ciudadesData =  await ciudadesPromise.data;
+				console.log("TCL: NewAnuncio -> loadAPI -> ciudadesData", ciudadesData)
+
+                // this.imagenes_Anuncio =  imagenesAnuncioData;
+                // console.log('​FloatingSearch -> loadAPI -> this.marcasData', this.marcasData)
+
+                this.setState({
+                    anuncioDetails : anunciosDetailsData,
+                    imagenes_Anuncio :  imagenesAnuncioData,
+                    modelos : modelosData, 
+                    // municipios,
+                    selectedMarca : this.createSelectOption(anunciosDetailsData.id_marca, this.marcasData),
+                    selectedModelo : this.createSelectOption(anunciosDetailsData.modelo, modelosData),
+                    selectedTipoVehiculo : this.createSelectOption(anunciosDetailsData.id_tipo_vehiculo, this.tipoData), 
+                    selectedYear : this.createSelectOptionNoFullData(anunciosDetailsData.year),
+                    // selectedVestiduras : this.createSelectOption(anunciosDetailsData.vestiduras, this.vestidurasData), 
+                    // selectedMunicipio,
+                    // selectedAnuncio : {label : anunciosDetailsData.tipo_Anuncio, value: anunciosDetailsData.id_tipo_Anuncio } ,
+                    // selectedTransaccion : thj,
+                    selectedTransmision : this.createSelectOption(anunciosDetailsData.transmision, this.trasnmisionData), 
+                    selectedMunicipio : this.createSelectOption(anunciosDetailsData.ciudad, ciudadesData),
+                    selectedColor : this.createSelectOption(anunciosDetailsData.color, this.colorsData),
+                    selectedCombustible  : this.createSelectOption(anunciosDetailsData.tipo_combustible, this.tipoCombustibleData),
+                    selectedEstado : this.createSelectOption(anunciosDetailsData.estado, ubicacionData), 
+                    selectedCondicion : this.createSelectOption(anunciosDetailsData.condicion_vehiculo, this.tipoCondicion),
+                    isLoaded: true
+                })
+
+            }
 
         /* ==========================================================================
         ** API Connection
         ** ========================================================================== */
 
 
-            // --------------------------------------
-            // Get All requests
-            // --------------------------------------
-            async loadAPI() {
-                const marcasArray = await this.loadMarcas();
-                this.marcasData = marcasArray;
-                const ubicacionArray = await this.loadUbicacion();
-                this.ubicacionData = ubicacionArray;
-                console.log('​FloatingSearch -> loadAPI -> this.marcasData', this.marcasData)
+           
+           
 
-                this.setState({
-                    isLoaded: true
-                })
 
+
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getAnuncioDetails(id_anuncio) {
+                const settings = { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        id_anuncio : id_anuncio || 0,
+                        edit_anuncio : true
+                    }  
+                }
+                const anuncioDetailsPromise = await axios.get(Endpoints.getAnuncioDetails, settings);
+                const anunciosData = await anuncioDetailsPromise.data;
+            
+                return anunciosData;
             }
+
+            /** --------------------------------------
+            // Get Anuncios Data
+            // With Promises
+            // @returns {An Promise Object}
+            // --------------------------------------*/
+            async getImagenesAnuncios(id_anuncio) {
+                const settings = { 
+                    headers : { 
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                    },
+                    params : {
+                        id_anuncio : id_anuncio || 0
+                    }  
+                }
+                const anuncioImagesPromise = await axios.get(Endpoints.getImagenesAnuncio, settings);
+                const anuncioImagesData = await anuncioImagesPromise.data;
+            
+                return anuncioImagesData;
+            }
+
 
 
             /** --------------------------------------
@@ -294,14 +391,14 @@
             // @returns {An array With all the Municipios}
             // --------------------------------------*/
             async loadMunicipios(id_estado) {
-                const { value } = id_estado;
+                // const { value } = id_estado;
                 const loadMunicipiosPromise = axios.get(Endpoints.getMunicipiosByEstado, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
                     params: {
-                        id_estado: value || 0
+                        id_estado: id_estado || 0
                     }
                 });
 
@@ -333,14 +430,15 @@
             // @returns {An Promise Object}
             // --------------------------------------*/
             async loadModelos(marca_id) {
-                const { value } = marca_id;
+				console.log("TCL: NewAnuncio -> loadModelos -> marca_id", marca_id)
+                // const { value } = marca_id;
                 const loadModelosPromise = axios.get(Endpoints.getModelosByMarca, {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
                     },
-                    params: {
-                        marca_id: value || 0
+                    params: {   
+                        marca_id: marca_id || 0
                     }
                 });
 
@@ -388,10 +486,53 @@
                 
             }
 
+            
+
+
+
+            // --------------------------------------
+            // Create Default Selectio Option
+            // --------------------------------------
+            createSelectOption(optionValue, source) {
+                console.log("TCL: NewAnuncio -> createSelectOption -> optionValue", optionValue)
+                console.log("TCL: NewAnuncio -> createSelectOption -> source", source)
+
+                const opt = source.filter((s)=>{ return optionValue === s.id || optionValue === s.value})[0]
+				console.log("TCL: NewAnuncio -> createSelectOption -> opt", opt)
+
+                const option = {
+                    label : opt.nombre || opt.label,
+                    value : opt.id || opt.value
+                }
+
+                return option;
+            }
+
+
+            // --------------------------------------
+            // Create Default Selectio Option No Full Data
+            // -------------------------------------
+            createSelectOptionNoFullData(optionValue) {
+                // console.log("TCL: NewAnuncio -> createSelectOption -> optionValue", optionValue)
+                // console.log("TCL: NewAnuncio -> createSelectOption -> source", source)
+
+                // const opt = source.filter((s)=>{ return optionValue === s.id || optionValue === s.value})[0]
+				// console.log("TCL: NewAnuncio -> createSelectOption -> opt", opt)
+
+                const option = {
+                    label : optionValue,
+                    value : optionValue
+                }
+
+                return option;
+            }
+
+
             // --------------------------------------
             // Handle Marcas Select State
             // --------------------------------------
             handleSelectMarcaChange = (selectedMarca) => {
+			console.log("TCL: NewAnuncio -> handleSelectMarcaChange -> selectedMarca", selectedMarca)
 
                 this.loadModelos(selectedMarca)
                     .then((modelosAnswer) => {
@@ -647,9 +788,7 @@
 				
             }
 
-            // --------------------------------------
-            // Get Activew Checbox Items
-            // --------------------------------------
+
             getEquipamientoItems() {
                 const {equipamientoData} = this.state;
                 const equipamientoValues = equipamientoData.filter((eq)=>eq.checked === true) ;
@@ -920,7 +1059,7 @@
                 const {selectedTipoVehiculo,  selectedMarca, selectedModelo, selectedCondicion, selectedYear, selectedEstado, selectedMunicipio} = this.state;
                 const {precio,propietarios} = this.state.newAnuncio;
                 let hasErrors = false;
-                if(selectedTipoVehiculo.value === null ||selectedTipoVehiculo.value === undefined ) {hasErrors = true; this.addErrorStatus("tipoVehiculo");} else this.removeErrorStatus("tipoVehiculo");
+                // if(selectedTipoVehiculo.value === null ||selectedTipoVehiculo.value === undefined ) {hasErrors = true; this.addErrorStatus("tipoVehiculo");} else this.removeErrorStatus("tipoVehiculo");
                 if(selectedMarca.value === null ||selectedMarca.value === undefined ) {hasErrors = true; this.addErrorStatus("marca");} else this.removeErrorStatus("marca");
                 if(selectedModelo.value === null ||selectedModelo.value === undefined ) {hasErrors = true; this.addErrorStatus("modelo");} else this.removeErrorStatus("modelo");
                 if(selectedYear.value === null ||selectedYear.value === undefined ) {hasErrors = true; this.addErrorStatus("year");} else this.removeErrorStatus("year");
@@ -1050,6 +1189,7 @@
             renderTipoSelect (selectedAnuncio) {
 				console.log('TCL: NewAnuncio -> renderTipoSelect -> selectedAnuncio', selectedAnuncio)
                 const {tipoData} = this;
+				console.log("TCL: renderTipoSelect -> tipoData", tipoData)
                 let selectData = [];
 				
                 switch(selectedAnuncio) {
@@ -1060,10 +1200,11 @@
                     case "clasico" : selectData = tipoData.filter((tipo) => {return tipo.value === '3' });
                         break;
                     case "agencias" : selectData = tipoData
+					
                         break;
                     default : return
                 }
-
+                console.log("TCL: renderTipoSelect -> selectData", selectData)
                 
                 return (
                     <Select
@@ -1140,10 +1281,10 @@
                         <div className="col-md-12">
                             <div className="sr-cardContainer">
                                 <div className="sr-cardHeader">
-                                    <h4>
+                                    {/*<h4>
                                         Anuncio {selectedAnuncio} <br/>
                                         
-                                    </h4>
+                                    </h4>*/}
                                 </div>
 
                                 <div className="sr-cardBody">
@@ -1203,20 +1344,23 @@
                     selectedColor,
                     selectedCombustible,
                     selectedEstado, 
-                    selectedCondicion
+                    selectedCondicion,
+                    selectedTipoVehiculo
                      } = this.state
 
                 const { kilometraje, ultimoDigito, precio, telefono, propietarios} = newAnuncio;
                 const { marcasData, ubicacionData, transaccionData, trasnmisionData, tipoCombustibleData, colorsData, condicionData } = this;
+
+                console.log("TCL: renderFormFieldsFirstCard -> selectedAnuncio", selectedAnuncio)
                 return (
                     <div className="sr-formContainer">
                         <div className="row">
-                            <div className="col-md-4">
+                            {/*<div className="col-md-4">
                                 <div className="sr-input-group sr-mandatory">
                                     <label htmlFor="sr-ProjectName" className="grey-text">Tipo de Vehiculo*</label>
                                         {this.renderTipoSelect(selectedAnuncio)}
                                 </div>
-                            </div>
+                            </div>*/}
 
 
                             <div className="col-md-4" sm="12">
@@ -1713,7 +1857,7 @@
                 const {tipoAnuncio} = this;
                 return (
                     <div className= "row">
-                        <h2 className = "sr-seccionTitle"> 1. Elige el mejor plan para tu anuncio </h2>
+                        <h2 className = "sr-seccionTitle"> 1. Elige el mejor plan para tu anuncissssssssso </h2>
                             <PriceTable pricesData = {tipoAnuncio} onCardClick = {this.onCardClick}/>
                        
                     </div>
@@ -1767,11 +1911,11 @@
             renderFormSteps() {
                 const { currentStep } = this.state;
                 switch(currentStep) {
-                    case 0 : return this.renderPrices();
+                    // case 0 : return this.renderFirstCard();
                     case 1 : return this.renderFirstCard();
                     case 2 : return this.renderSecondCard();
                     case 3 : return this.renderConfirmation();
-                    default : return this.renderPrices();
+                    default : return this.renderFirstCard();
                 }
             }
 
